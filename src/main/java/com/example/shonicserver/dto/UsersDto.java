@@ -7,13 +7,15 @@ import lombok.Setter;
 
 import java.util.UUID;
 
-@Setter
-@Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class ProfileDto {
+@NoArgsConstructor
+@Getter
+@Setter
+public class UsersDto {
     private UUID id;
-    private UsersDto userDto;
-    private String nomorHp;
-    private String nama;
+    private UsersDto usersDto;
+    private String email;
+    private String password;
+    private String role;
+    private AddressesDto addressesdto;
 }

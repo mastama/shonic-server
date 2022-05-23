@@ -20,7 +20,7 @@ public class Profile {
     private UUID id;
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id",referencedColumnName = "id",unique = true)
-    private User user;
+    private Users user;
     @Column(name = "nomor_hp")
     private String nomorHp;
     @Column(name = "nama")
