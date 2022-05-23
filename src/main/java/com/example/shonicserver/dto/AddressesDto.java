@@ -1,12 +1,11 @@
 package com.example.shonicserver.dto;
 
-import com.example.shonicserver.model.Users;
+import com.example.shonicserver.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -18,7 +17,7 @@ public class AddressesDto {
     private UUID id;
 
     // users: one to one
-    private Users users;
+    private User user;
 
     // street
     private String jalan;
