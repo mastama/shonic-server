@@ -18,11 +18,14 @@ public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
+
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id",referencedColumnName = "id",unique = true)
     private Users user;
+
     @Column(name = "nomor_hp")
     private String nomorHp;
+
     @Column(name = "nama")
     private String nama;
 
