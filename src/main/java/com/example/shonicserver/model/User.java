@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.apache.tomcat.jni.Address;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -15,7 +17,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "users")
-public class Users {
+public class User {
 
     @Id
     @Column(name = "id", nullable = false)
@@ -23,8 +25,8 @@ public class Users {
     private UUID id;
 
     // username
-    @Column(name = "username", nullable = false)
-    private String username;
+//    @Column(name = "username", nullable = false)
+//    private String username;
 
     // email unique
     @Column(name = "email", nullable = false)
@@ -35,8 +37,12 @@ public class Users {
     private String password;
 
     // role
-    @Column(name = "role", nullable = false)
-    private String role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
 
     // addresses one to one
     @OneToOne(mappedBy = "users", cascade = CascadeType.ALL)

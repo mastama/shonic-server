@@ -21,7 +21,8 @@ public class Profile {
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id",referencedColumnName = "id",unique = true)
-    private Users user;
+
+    private User user;
 
     @Column(name = "nomor_hp")
     private String nomorHp;

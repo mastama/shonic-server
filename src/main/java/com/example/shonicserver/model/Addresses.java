@@ -23,7 +23,7 @@ public class Addresses {
     // users: one to one
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
-    private Users users;
+    private User user;
 
     // street
     @Column(name = "jalan", nullable = false)
