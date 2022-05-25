@@ -45,6 +45,6 @@ public class User {
 
 
     // addresses one to one
-    @OneToOne(mappedBy = "users", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Addresses addresses;
 }
