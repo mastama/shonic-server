@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ProfileDto {
     private UUID id;
-    private UsersDto userDto;
+    private UserDto userDto;
     private String nomorHp;
     private String nama;
 }

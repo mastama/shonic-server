@@ -13,8 +13,8 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Setter
+@Getter
 @Entity
 @Table(name = "users")
 public class User {
@@ -25,8 +25,8 @@ public class User {
     private UUID id;
 
     // username
-//    @Column(name = "username", nullable = false)
-//    private String username;
+   @Column(name = "username", nullable = false)
+   private String username;
 
     // email unique
     @Column(name = "email", nullable = false)
@@ -36,6 +36,9 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    // addresses one to one
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Addresses addresses;
     // role
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
@@ -43,8 +46,4 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-
-    // addresses one to one
-    @OneToOne(mappedBy = "users", cascade = CascadeType.ALL)
-    private Addresses addresses;
 }
