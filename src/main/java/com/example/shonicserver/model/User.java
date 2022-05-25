@@ -24,13 +24,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    // username
-   @Column(name = "username", nullable = false)
+    // username as email uniq
+   @Column(name = "email", nullable = false)
    private String username;
 
     // email unique
-    @Column(name = "email", nullable = false)
-    private String email;
+   /* @Column(name = "email", nullable = false)
+    private String email;*/
 
     // password
     @Column(name = "password", nullable = false)
