@@ -1,6 +1,7 @@
 package com.example.shonicserver.controller;
 import com.example.shonicserver.dto.JwtResponseDto;
 import com.example.shonicserver.dto.LoginDto;
+import com.example.shonicserver.dto.UserDto;
 import com.example.shonicserver.service.JpaUserDetailsService;
 import com.example.shonicserver.service.UserService;
 import com.example.shonicserver.util.JwtUtil;
@@ -40,5 +41,16 @@ public class UserController {
         JwtResponseDto jwtResponse = new JwtResponseDto(jwtToken);
 
         return new ResponseEntity<JwtResponseDto>(jwtResponse, HttpStatus.ACCEPTED);
+    }
+
+    // create registration
+    @PostMapping("/register")
+    public ResponseEntity<UserDto>create(@RequestBody UserDto userDto) throws Exception {
+        try {
+            UserDto user = userService.create(userDto);
+            return new ResponseEntity<UserDto>(user, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<UserDto>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

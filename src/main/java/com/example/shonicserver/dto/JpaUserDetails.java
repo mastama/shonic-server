@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class JpaUserDetails implements UserDetails {
     private String username;
-    private  String password;
+    private String password;
     private Boolean isAccountNonExpired;
     private Boolean isAccountNonLocked;
     private Boolean isCredentialsNonExpired;
