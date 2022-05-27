@@ -16,13 +16,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto create(UserDto userDto) throws Exception {
         ERole name;
-        if(userDto.getRoles().equalsIgnoreCase("ROLE_ADMIN")) {
-            name = ERole.ROLE_ADMIN;
-        }else if(userDto.getRoles().equalsIgnoreCase("ROLE_CUSTOMER")) {
+
             name = ERole.ROLE_CUSTOMER;
-        }else {
-            throw new Exception(userDto.getRoles() + " is not a valid role");
-        }
+
         return userDto;
     }
 
