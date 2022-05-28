@@ -34,6 +34,9 @@ public class User {
     // password
     @Column(name = "password", nullable = false)
     private String password;
+    //full name
+    @Column(name = "full_name")
+    private String fullName;
 
     // addresses one to one
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
@@ -44,6 +47,14 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
     public UUID getId() {
         return id;

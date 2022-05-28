@@ -1,9 +1,7 @@
 package com.example.shonicserver.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.UUID;
 
@@ -13,6 +11,7 @@ public class UserDto {
     private UUID id;
     private String email;
     private String password;
+    private String fullName;
 
     public UUID getId() {
         return id;
@@ -26,7 +25,13 @@ public class UserDto {
         return password;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
     public void setId(UUID id) {
         this.id = id;
