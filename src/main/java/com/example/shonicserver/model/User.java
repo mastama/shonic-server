@@ -13,8 +13,7 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -45,4 +44,45 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Addresses getAddresses() {
+        return addresses;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setAddresses(Addresses addresses) {
+        this.addresses = addresses;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }
+

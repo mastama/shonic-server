@@ -2,6 +2,7 @@ package com.example.shonicserver.controller;
 import com.example.shonicserver.dto.JwtResponseDto;
 import com.example.shonicserver.dto.LoginDto;
 import com.example.shonicserver.dto.UserDto;
+import com.example.shonicserver.model.User;
 import com.example.shonicserver.service.JpaUserDetailsService;
 import com.example.shonicserver.service.UserService;
 import com.example.shonicserver.util.JwtUtil;
@@ -14,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/shonic/user")
+@RequestMapping("/api/v1/auth")
 public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -33,9 +34,9 @@ public class UserController {
     public ResponseEntity<JwtResponseDto> login(@RequestBody LoginDto loginDto) throws Exception {
         // authenticate the user
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
 
-        UserDetails userDetails = jpaUserDetailsService.loadUserByUsername(loginDto.getUsername());
+        UserDetails userDetails = jpaUserDetailsService.loadUserByUsername(loginDto.getEmail());
         String jwtToken = jwtUtil.generateToken(userDetails);
 
         JwtResponseDto jwtResponse = new JwtResponseDto(jwtToken);
@@ -49,8 +50,10 @@ public class UserController {
         try {
             UserDto user = userService.create(userDto);
             return new ResponseEntity<UserDto>(user, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<UserDto>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            return new ResponseEntity<UserDto>( HttpStatus.BAD_REQUEST);
         }
+
     }
 }
