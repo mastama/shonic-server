@@ -11,7 +11,7 @@ public class UserDto {
     private UUID id;
     private String email;
     private String password;
-    private String fullName;
+    private String fullname;
 
     public UUID getId() {
         return id;
@@ -25,12 +25,12 @@ public class UserDto {
         return password;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public void setId(UUID id) {

@@ -1,4 +1,5 @@
 package com.example.shonicserver.controller;
+import com.alibaba.fastjson.JSON;
 import com.example.shonicserver.dto.JwtResponseDto;
 import com.example.shonicserver.dto.LoginDto;
 import com.example.shonicserver.dto.UserDto;
@@ -15,6 +16,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.LinkedHashMap;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -49,14 +53,25 @@ public class UserController {
     // create registration
     @PostMapping("/register")
     public ResponseEntity<Response>create(@RequestBody UserDto userDto) throws Exception {
+        LinkedHashMap<String, Object> result=new LinkedHashMap<>();
         try {
             UserResponse user = userService.create(userDto);
-            return new ResponseEntity<Response>(new Response("200","User Created",user,null),HttpStatus.OK);
+
+            return new ResponseEntity<>(new Response(200,"succes",user,null),HttpStatus.OK);
+
         } catch (Exception e){
             System.out.println(e.getMessage());
-            return new ResponseEntity<Response>(new Response("500","Error Create User",null,e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
+            result.put("status",500);
+            result.put("message","register error");
+            result.put("data",e.getMessage());
+            return new ResponseEntity<>(new Response(500,"failed",null,e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+
+
     }
+
+
+
 
 }

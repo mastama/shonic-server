@@ -10,7 +10,7 @@ import java.util.UUID;
 public class UserResponse {
     private UUID id;
     private String email;
-    private String fullName;
+    private String fullname;
 
     public UUID getId() {
         return id;
@@ -29,10 +29,10 @@ public class UserResponse {
     }
 
     public String getFullName() {
-        return fullName;
+        return fullname;
     }
 
     public void setFullName(String fullName) {
-        this.fullName = fullName;
+        this.fullname = fullName;
     }
 }
