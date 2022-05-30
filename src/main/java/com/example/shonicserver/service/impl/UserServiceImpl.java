@@ -3,6 +3,7 @@ import com.example.shonicserver.model.User;
 import com.example.shonicserver.dto.UserDto;
 import com.example.shonicserver.model.ERole;
 import com.example.shonicserver.model.Role;
+import com.example.shonicserver.payload.response.UserResponse;
 import com.example.shonicserver.repository.RoleRepository;
 import com.example.shonicserver.repository.UserRepository;
 import com.example.shonicserver.service.UserService;
@@ -25,7 +26,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Override
-    public UserDto create(UserDto userDto) throws Exception {
+    public UserResponse create(UserDto userDto) throws Exception {
         ERole name = ERole.ROLE_CUSTOMER;
 
         Optional<Role> roleOptional = this.roleRepository.findByName(name);
@@ -48,10 +49,11 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
 
         User userSaved = this.userRepository.save(user);
-            UserDto userDtoResponse=new UserDto();
-            userDtoResponse.setId(userSaved.getId());
-            userDtoResponse.setEmail(userSaved.getUsername());
-        return userDtoResponse;
+            UserResponse userResponse = new UserResponse();
+            userResponse.setId(userSaved.getId());
+            userResponse.setEmail(userSaved.getUsername());
+            userResponse.setFullName(userSaved.getFullName());
+        return userResponse;
     }
 
 }

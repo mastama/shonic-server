@@ -3,6 +3,8 @@ import com.example.shonicserver.dto.JwtResponseDto;
 import com.example.shonicserver.dto.LoginDto;
 import com.example.shonicserver.dto.UserDto;
 import com.example.shonicserver.model.User;
+import com.example.shonicserver.payload.Response;
+import com.example.shonicserver.payload.response.UserResponse;
 import com.example.shonicserver.service.JpaUserDetailsService;
 import com.example.shonicserver.service.UserService;
 import com.example.shonicserver.util.JwtUtil;
@@ -46,13 +48,13 @@ public class UserController {
 
     // create registration
     @PostMapping("/register")
-    public ResponseEntity<UserDto>create(@RequestBody UserDto userDto) throws Exception {
+    public ResponseEntity<Response>create(@RequestBody UserDto userDto) throws Exception {
         try {
-            UserDto user = userService.create(userDto);
-            return new ResponseEntity<UserDto>(user, HttpStatus.CREATED);
+            UserResponse user = userService.create(userDto);
+            return new ResponseEntity<Response>(new Response("200","User Created",user,null),HttpStatus.OK);
         } catch (Exception e){
             System.out.println(e.getMessage());
-            return new ResponseEntity<UserDto>( HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Response>(new Response("500","Error Create User",null,e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
