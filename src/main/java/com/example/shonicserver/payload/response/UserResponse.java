@@ -10,7 +10,6 @@ import java.util.UUID;
 public class UserResponse {
     private UUID id;
     private String email;
-    private String password;
     private String fullName;
 
     public UUID getId() {
@@ -27,14 +26,6 @@ public class UserResponse {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFullName() {
