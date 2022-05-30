@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -25,11 +26,18 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Override
     public UserDto create(UserDto userDto) throws Exception {
-        ERole name ;
-        name = ERole.ROLE_CUSTOMER;
+        ERole name = ERole.ROLE_CUSTOMER;
 
-
-        Role role = this.roleRepository.findByName(name).get();
+        Optional<Role> roleOptional = this.roleRepository.findByName(name);
+        Role role;
+        if(roleOptional.isPresent()){
+            role = roleOptional.get();
+        }
+        else{
+            Role newRole = new Role();
+            newRole.setName(name);
+            role = roleRepository.save(newRole);
+        }
         Set<Role> roles = new HashSet<>();
         roles.add(role);
 
