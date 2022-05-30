@@ -1,7 +1,5 @@
 package com.example.shonicserver.payload;
 
-import javafx.beans.binding.ObjectExpression;
-
 public class Response {
     public String status;
     public String message;
