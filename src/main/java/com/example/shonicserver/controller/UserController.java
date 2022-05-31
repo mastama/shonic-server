@@ -3,6 +3,7 @@ import com.example.shonicserver.dto.JwtResponseDto;
 import com.example.shonicserver.dto.LoginDto;
 import com.example.shonicserver.dto.UserDto;
 import com.example.shonicserver.model.User;
+import com.example.shonicserver.payload.Response;
 import com.example.shonicserver.service.JpaUserDetailsService;
 import com.example.shonicserver.service.UserService;
 import com.example.shonicserver.util.JwtUtil;
@@ -31,17 +32,23 @@ public class UserController {
         return "home page";
     }
     @PostMapping("/login")
-    public ResponseEntity<JwtResponseDto> login(@RequestBody LoginDto loginDto) throws Exception {
+    public ResponseEntity<Response> login(@RequestBody LoginDto loginDto) throws Exception {
         // authenticate the user
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+        try {
 
-        UserDetails userDetails = jpaUserDetailsService.loadUserByUsername(loginDto.getEmail());
-        String jwtToken = jwtUtil.generateToken(userDetails);
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
 
-        JwtResponseDto jwtResponse = new JwtResponseDto(jwtToken);
+            UserDetails userDetails = jpaUserDetailsService.loadUserByUsername(loginDto.getEmail());
+            String jwtToken = jwtUtil.generateToken(userDetails);
 
-        return new ResponseEntity<JwtResponseDto>(jwtResponse, HttpStatus.ACCEPTED);
+            JwtResponseDto jwtResponse = new JwtResponseDto(jwtToken);
+
+            return new ResponseEntity<>(new Response(jwtResponse, "success login", "200"), HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     // create registration
