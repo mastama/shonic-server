@@ -1,9 +1,7 @@
 package com.example.shonicserver.controller;
-import com.alibaba.fastjson.JSON;
 import com.example.shonicserver.dto.JwtResponseDto;
 import com.example.shonicserver.dto.LoginDto;
 import com.example.shonicserver.dto.UserDto;
-import com.example.shonicserver.model.User;
 import com.example.shonicserver.payload.Response;
 import com.example.shonicserver.payload.response.UserResponse;
 import com.example.shonicserver.service.JpaUserDetailsService;
@@ -18,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -44,8 +41,7 @@ public class UserController {
 
         UserDetails userDetails = jpaUserDetailsService.loadUserByUsername(loginDto.getEmail());
         String jwtToken = jwtUtil.generateToken(userDetails);
-
-        JwtResponseDto jwtResponse = new JwtResponseDto(jwtToken);
+        JwtResponseDto jwtResponse = new JwtResponseDto(jwtToken, "200");
 
         return new ResponseEntity<JwtResponseDto>(jwtResponse, HttpStatus.ACCEPTED);
     }
