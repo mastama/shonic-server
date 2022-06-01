@@ -53,7 +53,7 @@ public class UserController {
     // create registration
     @PostMapping("/register")
     public ResponseEntity<Response>create(@RequestBody UserDto userDto) throws Exception {
-        LinkedHashMap<String, Object> result=new LinkedHashMap<>();
+
         try {
             UserResponse user = userService.create(userDto);
 
@@ -61,9 +61,6 @@ public class UserController {
 
         } catch (Exception e){
             System.out.println(e.getMessage());
-            result.put("status",500);
-            result.put("message","register error");
-            result.put("data",e.getMessage());
             return new ResponseEntity<>(new Response(500,"failed",null,e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

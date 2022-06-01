@@ -33,7 +33,7 @@ public class JwtConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .cors().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/").permitAll() // allow this endpoint without authentication
+                .antMatchers("/api/v1/auth/*").permitAll() // allow this endpoint without authentication
                 .anyRequest().permitAll()// for any other request, authentication should be performed
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint)
