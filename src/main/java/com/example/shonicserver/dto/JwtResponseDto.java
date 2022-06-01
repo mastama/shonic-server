@@ -14,5 +14,5 @@ public class JwtResponseDto {
 
     private String token;
 
-    private String statusCode;
+    private Integer statusCode;
 }
