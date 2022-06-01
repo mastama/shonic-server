@@ -33,13 +33,14 @@ public class JwtConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .cors().disable()
                 .authorizeRequests()
-                .antMatchers( "/api/v1/auth/register").permitAll() // allow this endpoint without authentication
-                .anyRequest().permitAll() // for any other request, authentication should be performed
+                .antMatchers("/api/v1/auth/*").permitAll() // allow this endpoint without authentication
+                .anyRequest().permitAll()// for any other request, authentication should be performed
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // every request should be independent of other and server does not have to manage session
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
     }
     @Bean
     public BCryptPasswordEncoder getPasswordEncoder(){
