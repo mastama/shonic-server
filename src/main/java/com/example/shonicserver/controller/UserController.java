@@ -46,7 +46,9 @@ public class UserController {
 
             return new ResponseEntity<>(new Response(jwtResponse, "success login", "200"), HttpStatus.ACCEPTED);
         }catch (Exception e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+            JwtResponseDto jwtResponse = new JwtResponseDto();
+            return new ResponseEntity<>(new Response(jwtResponse, "Email dan password anda salah", "404 "), HttpStatus.BAD_REQUEST);
+            //return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
     }
