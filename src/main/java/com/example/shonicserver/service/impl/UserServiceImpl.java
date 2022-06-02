@@ -1,4 +1,5 @@
 package com.example.shonicserver.service.impl;
+import com.example.shonicserver.dto.RegisterDto;
 import com.example.shonicserver.model.User;
 import com.example.shonicserver.dto.UserDto;
 import com.example.shonicserver.model.ERole;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Override
-    public UserResponse create(UserDto userDto) throws Exception {
+    public UserResponse create(RegisterDto registerDto) throws Exception {
         ERole name = ERole.ROLE_CUSTOMER;
 
         Optional<Role> roleOptional = this.roleRepository.findByName(name);
@@ -43,9 +44,9 @@ public class UserServiceImpl implements UserService {
         roles.add(role);
 
         User user = new User();
-        user.setUsername(userDto.getEmail());
-        user.setFullName(userDto.getFullname());
-        user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+        user.setUsername(registerDto.getEmail());
+        user.setFullName(registerDto.getFullname());
+        user.setPassword(bCryptPasswordEncoder.encode(registerDto.getPassword()));
         user.setRoles(roles);
 
         User userSaved = this.userRepository.save(user);

@@ -13,6 +13,7 @@ import lombok.Setter;
 public class JwtResponseDto {
 
     private String token;
+    private Integer status;
+    private String message;
 
-    private String statusCode;
 }

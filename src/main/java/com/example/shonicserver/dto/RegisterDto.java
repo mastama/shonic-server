@@ -12,7 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class RegisterDto {
-    private UUID id;
     private String email;
     private String password;
+    private String fullname;
 }
