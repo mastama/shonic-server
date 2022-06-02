@@ -42,7 +42,7 @@ public class UserController {
 
         UserDetails userDetails = jpaUserDetailsService.loadUserByUsername(loginDto.getEmail());
         String jwtToken = jwtUtil.generateToken(userDetails);
-        JwtResponseDto jwtResponse = new JwtResponseDto(jwtToken, 200);
+        JwtResponseDto jwtResponse = new JwtResponseDto(jwtToken, 200,"success");
 
         return new ResponseEntity<JwtResponseDto>(jwtResponse, HttpStatus.ACCEPTED);
     }
