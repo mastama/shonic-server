@@ -46,7 +46,7 @@ public class OTPController {
             email = emailCheck.getEmail();
             int otp = otpService.generateOTP(email);
 
-            String message = "Kode Verifikasi email anda : " + String.valueOf(otp)+"\n\n <br> Kode Verifikasi berlaku selama 1 Menit";
+            String message = "Kode Verifikasi email anda : " + String.valueOf(otp)+"\n\n <br> Kode Verifikasi berlaku selama 2 Menit";
             String finalEmail = email;
             Thread emailThread = new Thread(()->{
                 try {
@@ -82,7 +82,7 @@ public class OTPController {
         result.put("message","Entered Otp is valid");
         result.put("status",200);
         final String SUCCESS = JSON.toJSON(result).toString();
-        result.put("message","Entered Otp is NOT valid. Please Retry!");
+        result.put("message","Entered Otp is NOT valid");
         result.put("status",400);
         final String FAIL = JSON.toJSON(result).toString();
         String email= validateOTP.getEmail();

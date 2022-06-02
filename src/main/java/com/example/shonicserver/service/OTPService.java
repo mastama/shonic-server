@@ -9,7 +9,7 @@ import com.google.common.cache.CacheLoader;
 
 @Service
 public class OTPService {
-    private static final Integer EXPIRE_MINS = 5;
+    private static final Integer EXPIRE_MINS = 2;
     private LoadingCache otpCache;
     public OTPService() {
         super();
