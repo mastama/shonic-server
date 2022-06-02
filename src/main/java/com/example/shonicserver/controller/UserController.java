@@ -35,6 +35,7 @@ public class UserController {
         return "home page";
     }
     @PostMapping("/login")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<JwtResponseDto> login(@RequestBody LoginDto loginDto) throws Exception {
         // authenticate the user
         authenticationManager.authenticate(
@@ -49,6 +50,7 @@ public class UserController {
 
     // create registration
     @PostMapping("/register")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Response>create(@RequestBody RegisterDto registerDto) throws Exception {
 
         try {
