@@ -9,6 +9,7 @@ import com.example.shonicserver.model.User;
 import com.example.shonicserver.repository.UserRepository;
 import com.example.shonicserver.service.EmailService;
 import com.example.shonicserver.service.OTPService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/otp")
+@CrossOrigin(origins = "*")
+@Api(tags = "OTP")
 public class OTPController {
     @Autowired
     public OTPService otpService;

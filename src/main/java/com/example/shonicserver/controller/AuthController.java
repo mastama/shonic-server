@@ -8,6 +8,7 @@ import com.example.shonicserver.payload.response.UserResponse;
 import com.example.shonicserver.service.JpaUserDetailsService;
 import com.example.shonicserver.service.UserService;
 import com.example.shonicserver.util.JwtUtil;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,9 @@ import java.util.LinkedHashMap;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-public class UserController {
+@CrossOrigin(origins = "*")
+@Api(tags = "Auth")
+public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -30,10 +33,10 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/home")
-    public String home(){
-        return "home page";
-    }
+//    @GetMapping("/home")
+//    public String home(){
+//        return "home page";
+//    }
     @PostMapping("/login")
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<JwtResponseDto> login(@RequestBody LoginDto loginDto) throws Exception {
