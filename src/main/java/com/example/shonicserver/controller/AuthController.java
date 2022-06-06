@@ -1,10 +1,13 @@
 package com.example.shonicserver.controller;
+import com.alibaba.fastjson.JSON;
 import com.example.shonicserver.dto.JwtResponseDto;
 import com.example.shonicserver.dto.LoginDto;
 import com.example.shonicserver.dto.RegisterDto;
 import com.example.shonicserver.dto.UserDto;
+import com.example.shonicserver.model.User;
 import com.example.shonicserver.payload.Response;
 import com.example.shonicserver.payload.response.UserResponse;
+import com.example.shonicserver.repository.UserRepository;
 import com.example.shonicserver.service.JpaUserDetailsService;
 import com.example.shonicserver.service.UserService;
 import com.example.shonicserver.util.JwtUtil;
@@ -18,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -32,13 +36,14 @@ public class AuthController {
     private JwtUtil jwtUtil;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
 //    @GetMapping("/home")
 //    public String home(){
 //        return "home page";
 //    }
     @PostMapping("/login")
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<JwtResponseDto> login(@RequestBody LoginDto loginDto) throws Exception {
         // authenticate the user
         authenticationManager.authenticate(
@@ -53,18 +58,42 @@ public class AuthController {
 
     // create registration
     @PostMapping("/register")
-    @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<Response>create(@RequestBody RegisterDto registerDto) throws Exception {
-
-        try {
-            UserResponse user = userService.create(registerDto);
-
-            return new ResponseEntity<>(new Response(200,"succes",user,null),HttpStatus.OK);
-
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-            return new ResponseEntity<>(new Response(500,"failed",null,e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<String>create(@RequestBody RegisterDto registerDto) throws Exception {
+        LinkedHashMap<String, Object> result=new LinkedHashMap<>();
+        Optional<User> userOptional= userRepository.findByUsername(registerDto.getEmail());
+        if(userOptional.isPresent()){
+            result.put("message","Email Sudah Terdaftar");
+            result.put("status",400);
+            result.put("error","Email Invalid");
+            String json =JSON.toJSON(result).toString();
+            return new ResponseEntity<>(json, HttpStatus.BAD_REQUEST);
         }
+        else{
+            try {
+                UserResponse user = userService.create(registerDto);
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(registerDto.getEmail(),registerDto.getPassword()));
+
+                UserDetails userDetails = jpaUserDetailsService.loadUserByUsername(registerDto.getEmail());
+                String jwtToken = jwtUtil.generateToken(userDetails);
+
+                result.put("token",jwtToken);
+                result.put("message","Register Berhasil");
+                result.put("status",200);
+                result.put("data",user);
+                String json =JSON.toJSON(result).toString();
+                return new ResponseEntity<>(json, HttpStatus.OK);
+
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+                result.put("message","Register Gagal");
+                result.put("status",500);
+                result.put("error",e.getMessage());
+                String json =JSON.toJSON(result).toString();
+                return new ResponseEntity<>(json, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
 
 
 
