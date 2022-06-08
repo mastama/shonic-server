@@ -30,4 +30,7 @@ public class Profile {
     @Column(name = "nama")
     private String nama;
 
+    @Column(name = "photo")
+    private String photo;
+
 }

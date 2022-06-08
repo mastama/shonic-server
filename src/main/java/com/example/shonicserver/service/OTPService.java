@@ -21,7 +21,6 @@ public class OTPService {
                     public Integer load(Object o) throws Exception {
                         return 0;
                     }
-
                 });
     }
     public int generateOTP(String key){
