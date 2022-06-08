@@ -4,31 +4,30 @@ import com.alibaba.fastjson.JSON;
 import com.example.shonicserver.dto.EmailCheck;
 import com.example.shonicserver.dto.ValidateOTP;
 import com.example.shonicserver.model.User;
+import com.example.shonicserver.payload.request.ResetPassword;
 import com.example.shonicserver.repository.UserRepository;
 import com.example.shonicserver.service.EmailService;
 import com.example.shonicserver.service.OTPService;
-import com.example.shonicserver.service.UserService;
-import com.example.shonicserver.service.UserServices;
-import com.google.common.cache.LoadingCache;
+import com.example.shonicserver.service.ResetPasswordService;
+import io.swagger.annotations.Api;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Optional;
-import java.util.Random;
 
 @RestController
 @RequestMapping("/api/v1/forgotpassword")
+@CrossOrigin("*")
+@Api(tags = "Forgot Password")
 public class ForgotPasswordController {
 
     @Autowired
-    private UserServices userServices;
+    private ResetPasswordService resetPasswordService;
 
     @Autowired
     public EmailService emailService;
@@ -92,19 +91,19 @@ public class ForgotPasswordController {
                     String token = RandomString.make(30);
 
                     try {
-                        userServices.updateResetPasswordToken(token, email);
+                        resetPasswordService.updateResetPasswordToken(token, email);
                         result.put("message","Entered Otp is valid");
                         result.put("status", 200);
                         result.put("token", token);
                         final String SUCCESS = JSON.toJSON(result).toString();
                         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
                     } catch (Exception e){
-                        result.put("message","Entered Otp is valid");
-                        result.put("status", 200);
-                        result.put("token", token);
+                        result.put("message","Entered Otp is valid but Invalid get Token");
+                        result.put("status", 500);
+//                        result.put("token", token);
                         result.put("error", e.getMessage());
                         final String SUCCESS = JSON.toJSON(result).toString();
-                        return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+                        return new ResponseEntity<>(SUCCESS, HttpStatus.INTERNAL_SERVER_ERROR);
                     }
                 }
                 else {
@@ -119,21 +118,57 @@ public class ForgotPasswordController {
     }
 
     @PostMapping("/reset_password")
-    public String processResetPassword(HttpServletRequest request, Model model) {
-        String token = request.getParameter("token");
-        String newPassword = request.getParameter("new_password");
+    public ResponseEntity<String> processResetPassword(@RequestBody ResetPassword resetPassword) {
+        String token = resetPassword.getToken();
+        String newPassword = resetPassword.getNewPassword();
+        String email = resetPassword.getEmail();
+        LinkedHashMap<String, Object> response=new LinkedHashMap<>();
 
-        User user = userServices.getByResetPasswordToken(token).get();
-        model.addAttribute("title", "Reset Password");
 
-        if (user != null) {
-            model.addAttribute("message", "Invalid token.");
-            return "message";
-        } else {
-            userServices.updatePassword(user, newPassword);
-            model.addAttribute("message", "Password updated successfully.");
+        String tokenSaved = resetPasswordService.getTokenSaved(email);
+        if(tokenSaved.equals(token)){
+            try {
+                Optional<User> user = userRepository.findByUsername(email);
+                if (user.isPresent()){
+
+                    Boolean resetSucces = resetPasswordService.updatePassword(user.get(),newPassword);
+                    if(resetSucces){
+                        resetPasswordService.clearToken(email);
+                        response.put("message","Password berhasil diubah");
+                        response.put("status",200);
+                        String json = JSON.toJSON(response).toString();
+                        return new ResponseEntity<>(json,HttpStatus.OK);
+                    }
+                    else {
+                        response.put("message","Password baru harus berbeda dengan password lama");
+                        response.put("status",400);
+                        String json = JSON.toJSON(response).toString();
+                        return new ResponseEntity<>(json,HttpStatus.BAD_REQUEST);
+                    }
+
+                }
+                else {
+                    response.put("message","User tidak ditemukan");
+                    response.put("status",400);
+                    String json = JSON.toJSON(response).toString();
+                    return new ResponseEntity<>(json,HttpStatus.BAD_REQUEST);
+                }
+            }catch (Exception e){
+                response.put("message","Error update Password");
+                response.put("status",500);
+                response.put("error",e.getMessage());
+                String json = JSON.toJSON(response).toString();
+                return new ResponseEntity<>(json,HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
         }
-        return "message";
+        else {
+            response.put("message","Token not Valid");
+            response.put("status",400);
+            String json = JSON.toJSON(response).toString();
+            return new ResponseEntity<>(json,HttpStatus.BAD_REQUEST);
+        }
+//
     }
 
 

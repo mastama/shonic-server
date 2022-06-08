@@ -4,7 +4,6 @@ import javax.mail.MessagingException;
 import com.alibaba.fastjson.JSON;
 import com.example.shonicserver.dto.EmailCheck;
 import com.example.shonicserver.dto.ValidateOTP;
-import com.example.shonicserver.helper.EmailTemplate;
 import com.example.shonicserver.model.User;
 import com.example.shonicserver.repository.UserRepository;
 import com.example.shonicserver.service.EmailService;
@@ -15,9 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -99,7 +97,7 @@ public class OTPController {
             if(serverOtp > 0){
                 if(otpnum == serverOtp){
                     otpService.clearOTP(email);
-                    return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+                        return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
                 }
                 else {
                     return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
