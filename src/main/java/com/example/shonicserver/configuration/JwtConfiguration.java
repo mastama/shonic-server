@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -53,19 +54,20 @@ public class JwtConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint)
                 .and()
                 .oauth2Login()
-                    .loginPage("/api/v1/auth/home")
+                    .loginPage("/")
                     .userInfoEndpoint().userService(oAuth2UserService)
                     .and()
                     .successHandler(new AuthenticationSuccessHandler() {
                         @Override
                         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                                             Authentication authentication) throws IOException, ServletException {
+                            System.out.println("masuk succsess handler");
+                            DefaultOidcUser oauthUser = (DefaultOidcUser) authentication.getPrincipal();
+                            String email = oauthUser.getAttribute("email");
+                            userService.processOAuthPostLogin(email);
+                            System.out.println("email : "+oauthUser.getEmail());
 
-                            CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
-
-                            userService.processOAuthPostLogin(oauthUser.getEmail());
-
-                            response.sendRedirect("/list");
+                            response.sendRedirect("/api/v1/auth/home");
                         }
                     })
                 .and()

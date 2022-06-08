@@ -16,9 +16,10 @@ public class UserService {
         if (existUser == null) {
             User newUser = new User();
             newUser.setUsername(username);
+            //newUser.setPassword(newUser.getPassword());
             newUser.setProvider(Provider.GOOGLE);
            // newUser.setEnabled(true);
-            System.out.println("masuk sini");
+            System.out.println("masuk existUser");
             repo.save(newUser);
 
         }else {
