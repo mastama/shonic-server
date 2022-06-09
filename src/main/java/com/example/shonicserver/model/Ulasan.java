@@ -18,5 +18,8 @@ public class Ulasan {
     @Column(name = "ulasan")
     private Integer ulasan;
 
-    // OneToMany rating
+    // ManyToOne rating
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "rating_id")
+    private Rating rating;
 }

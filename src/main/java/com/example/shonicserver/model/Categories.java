@@ -21,4 +21,9 @@ public class Categories {
         @Column(name = "name", nullable = false, unique = true)
         private String name;
 
+        // foreign key
+        @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+        @JoinColumn(name = "product_id")
+        private Product product;
+
 }

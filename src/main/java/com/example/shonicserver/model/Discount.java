@@ -27,6 +27,11 @@ public class Discount {
     @Column(name = "discount")
     private Integer discount;
 
+    // foreign key
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
+
 
 
 

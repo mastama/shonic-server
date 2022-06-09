@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,18 +31,27 @@ public class Product {
     @Column(name = "date", nullable = false)
     private Timestamp date;
 
-    // categoryId ManyToOne
+    // categoryId OneToMany
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Categories> categories;
 
 
-    // brandId OneToMany
+    // brandId ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
 
-
-    // discountId ManyToOne
-
+    // discountId OneToMany
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Discount> discount;
 
     @Column(name = "image")
     private String image;
 
     @Column(name = "image_full")
     private Boolean imageFull;
+
+    // rating OneToMany
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Rating> rating;
 }
