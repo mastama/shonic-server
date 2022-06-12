@@ -39,10 +39,10 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-//    @GetMapping("/home")
-//    public String home(){
-//        return "home page";
-//    }
+   @GetMapping("/home")
+    public String home(){
+        return "home page";
+   }
     @PostMapping("/login")
     public ResponseEntity<JwtResponseDto> login(@RequestBody LoginDto loginDto) throws Exception {
         // authenticate the user

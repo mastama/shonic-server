@@ -19,12 +19,12 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     // username as email uniq
-   @Column(name = "email", nullable = false)
+   @Column(name = "email")
    private String username;
 
     // email unique
@@ -32,7 +32,7 @@ public class User {
     private String email;*/
 
     // password
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
     //full name
     @Column(name = "full_name")
@@ -47,7 +47,17 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    @Column(name = "oauth_provider")
+    private Provider provider;
 
+    public Provider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(Provider provider) {
+        this.provider = provider;
+    }
 
     public String getFullName() {
         return fullname;
