@@ -49,7 +49,7 @@ public class JwtConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/oauth2/**").permitAll()
                 .antMatchers("/api/v1/otp/*","/api/v1/auth/*","/*").permitAll() // allow this endpoint without authentication
-                .anyRequest().permitAll()// for any other request, authentication should be performed
+                .anyRequest().authenticated()// for any other request, authentication should be performed
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint)
                 .and()
