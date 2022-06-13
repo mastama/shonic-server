@@ -43,11 +43,13 @@ public class UserServiceImpl implements UserService {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
 
+
         User user = new User();
         user.setUsername(registerDto.getEmail());
         user.setFullName(registerDto.getFullname());
         user.setPassword(bCryptPasswordEncoder.encode(registerDto.getPassword()));
         user.setRoles(roles);
+
 
         User userSaved = this.userRepository.save(user);
             UserResponse userResponse = new UserResponse();

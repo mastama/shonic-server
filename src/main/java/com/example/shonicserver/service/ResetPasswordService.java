@@ -7,6 +7,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional
-public class UserServices {
+public class ResetPasswordService {
 
     @Autowired
     private UserRepository userRepository;
@@ -26,7 +27,7 @@ public class UserServices {
         Optional<User> user = userRepository.findByUsername(email);
         if (user.isPresent()) {
             resetToken = CacheBuilder.newBuilder().
-                    expireAfterWrite(2, TimeUnit.MINUTES)
+                    expireAfterWrite(10, TimeUnit.MINUTES)
                     .build(new CacheLoader() {
 
                         @Override
@@ -40,17 +41,41 @@ public class UserServices {
         }
     }
 
+    public String getTokenSaved(String key){
+        try{
+            return (String) resetToken.get(key);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return "Not Found";
+        }
+    }
+
 //    public Optional<User> getByResetPasswordToken(String token) {
 //        return userRepository.findByResetPasswordToken(token);
 //    }
 
-    public void updatePassword(User user, String newPassword) {
+    public boolean updatePassword(User user, String newPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(newPassword);
-        user.setPassword(encodedPassword);
+        String oldPassword = user.getPassword();
+
+
+
+        if(BCrypt.checkpw(newPassword,oldPassword)){
+            return false;
+        }
+        else {
+            user.setPassword(encodedPassword);
+            userRepository.save(user);
+            return true;
+        }
+
 
 //        user.setResetPasswordToken(null);
-        userRepository.save(user);
+
+    }
+    public void clearToken(String key){
+        resetToken.invalidate(key);
     }
 
 }
