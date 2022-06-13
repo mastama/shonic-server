@@ -14,6 +14,7 @@ import java.util.List;
 public class Categories {
 
         @Id
+        @Column(name = "category_id", nullable = false)
         @GeneratedValue(strategy = GenerationType.AUTO)
         private String categoryId;
 
@@ -21,8 +22,8 @@ public class Categories {
         private String name;
 
         // foreign key
-        @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "categories")
-        private List<Product> product;
-
+        @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+        @JoinColumn(name = "product_id")
+        private Product product;
 
 }

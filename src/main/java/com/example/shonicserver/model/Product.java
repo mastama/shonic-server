@@ -15,6 +15,7 @@ import java.util.List;
 public class Product {
 
     @Id
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
@@ -31,19 +32,17 @@ public class Product {
     private Timestamp date;
 
     // categoryId OneToMany
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Categories categories;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Categories> categories;
 
     // brandId ManyToOne
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
-    // flashSale OneToMany
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private FlashSale flashSale;
+    // discountId OneToMany
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FlashSale> discount;
 
     @Column(name = "image")
     private String image;
@@ -51,8 +50,7 @@ public class Product {
     @Column(name = "image_full")
     private Boolean imageFull;
 
-    // rating OneToMan
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Rating rating;
+    // rating OneToMany
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Rating> rating;
 }
