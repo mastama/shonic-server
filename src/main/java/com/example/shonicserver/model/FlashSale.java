@@ -11,10 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "discount")
-public class Discount {
+@Table(name = "flashSale")
+public class FlashSale {
     @Id
-    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
@@ -28,9 +27,8 @@ public class Discount {
     private Integer discount;
 
     // foreign key
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "flashSale")
+    private List<Product> product;
 
 
 

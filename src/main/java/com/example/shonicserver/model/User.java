@@ -1,9 +1,6 @@
 package com.example.shonicserver.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.apache.tomcat.jni.Address;
 
 import javax.persistence.*;
@@ -13,6 +10,7 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 
 @Entity
 @Table(name = "users")
@@ -48,53 +46,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-
-    public String getFullName() {
-        return fullname;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullname = fullName;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public Addresses getAddresses() {
-        return addresses;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setAddresses(Addresses addresses) {
-        this.addresses = addresses;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+    // rating
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Rating rating;
 }
 

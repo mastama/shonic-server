@@ -20,15 +20,13 @@ public class Rating {
     @Column(name = "rating")
     private Integer rating;
 
-    // ManyToOne user
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    // OneToMany user
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "rating")
+    private List<User> users;
 
     // ManyToOne product
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @OneToMany(mappedBy = "rating", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Product> products;
 
     // OneToMany ulasan
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "rating")
