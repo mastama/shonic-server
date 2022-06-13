@@ -2,7 +2,7 @@ package com.example.shonicserver.dto;
 
 import com.example.shonicserver.model.Brand;
 import com.example.shonicserver.model.Categories;
-import com.example.shonicserver.model.Discount;
+import com.example.shonicserver.model.FlashSale;
 import com.example.shonicserver.model.Rating;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,7 +25,7 @@ public class ProductDto {
     private Timestamp date;
     private List<Categories> categories;
     private Brand brand;
-    private List<Discount> discount;
+    private List<FlashSale> discount;
     private String image;
     private Boolean imageFull;
     private List<Rating> rating;

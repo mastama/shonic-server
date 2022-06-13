@@ -35,7 +35,6 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Categories> categories;
 
-
     // brandId ManyToOne
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id")
@@ -43,7 +42,7 @@ public class Product {
 
     // discountId OneToMany
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Discount> discount;
+    private List<FlashSale> discount;
 
     @Column(name = "image")
     private String image;

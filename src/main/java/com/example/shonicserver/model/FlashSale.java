@@ -5,14 +5,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 
 @Entity
-@Table(name = "discount")
-public class Discount {
+@Table(name = "flashSale")
+public class FlashSale {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,8 +23,8 @@ public class Discount {
     @Column(name = "finish_time")
     private Timestamp finishTime;
 
-    @Column(name = "discount")
-    private Integer discount;
+    @Column(name = "flash_sale")
+    private Integer flashSale;
 
     // foreign key
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
