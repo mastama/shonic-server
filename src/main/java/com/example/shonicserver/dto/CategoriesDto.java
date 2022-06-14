@@ -5,14 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
+@Getter
 public class CategoriesDto {
 
-    private String categoryId;
+    private Long categoryId;
     private String name;
-    private Product product;
+    private ProductDto productDto;
 }

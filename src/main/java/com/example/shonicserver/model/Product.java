@@ -1,42 +1,47 @@
 package com.example.shonicserver.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Getter
+@Setter
 @Entity
 @Table(name = "product")
 public class Product {
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private UUID id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name",  unique = true)
     private String name;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price" )
     private Integer price;
 
-    @Column(name = "qty", nullable = false, length = 3)
+    @Column(name = "qty",  length = 3)
     private Integer qty;
 
-    @Column(name = "date", nullable = false)
-    private Timestamp date;
+    @Column(name = "date")
+    private String date;
 
     // categoryId OneToMany
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Categories> categories;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Categories categories;
 
     // brandId ManyToOne
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
@@ -52,5 +57,5 @@ public class Product {
 
     // rating OneToMany
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Rating> rating;
+    private List<Rating> ratingList;
 }

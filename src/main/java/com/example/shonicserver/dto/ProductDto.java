@@ -12,21 +12,19 @@ import lombok.Setter;
 import java.sql.Timestamp;
 import java.util.List;
 
-@Setter
-@Getter
+
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
+@Getter
 public class ProductDto {
 
-    private String id;
     private String name;
     private Integer price;
     private Integer qty;
-    private Timestamp date;
-    private List<Categories> categories;
-    private Brand brand;
-    private List<FlashSale> discount;
-    private String image;
-    private Boolean imageFull;
-    private List<Rating> rating;
+    private String category;
+    private String brand;
+    //private String image;
+   // private Boolean imageFull;
+   // private List<RatingDto> ratingDtoList;
 }

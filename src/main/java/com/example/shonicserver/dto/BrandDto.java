@@ -8,14 +8,14 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
+@Getter
 public class BrandDto {
 
     private Integer id;
     private String name;
-    private List<Product> product;
+    private ProductDto productDto;
 
 }

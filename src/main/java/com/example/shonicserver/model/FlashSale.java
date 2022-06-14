@@ -1,14 +1,17 @@
 package com.example.shonicserver.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Getter
+@Setter
 @Entity
 @Table(name = "flashSale")
 public class FlashSale {
