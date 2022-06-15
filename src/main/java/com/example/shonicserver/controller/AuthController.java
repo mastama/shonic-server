@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -39,10 +40,12 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-   @GetMapping("/home")
-    public String home(){
-        return "home page";
-   }
+    @GetMapping("/getAll")
+    public ResponseEntity<List<UserDto>> getAll() {
+        List<UserDto> userDtoList = this.userService.getAll();
+
+        return new ResponseEntity<>(userDtoList, HttpStatus.OK);
+    }
     @PostMapping("/login")
     public ResponseEntity<JwtResponseDto> login(@RequestBody LoginDto loginDto) throws Exception {
         // authenticate the user
