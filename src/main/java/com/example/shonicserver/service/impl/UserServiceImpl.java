@@ -12,9 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
@@ -57,6 +56,26 @@ public class UserServiceImpl implements UserService {
             userResponse.setEmail(userSaved.getUsername());
             userResponse.setFullName(userSaved.getFullName());
         return userResponse;
+    }
+
+    @Override
+    public List<UserDto> getAll() {
+        List<User> userList = this.userRepository.findAll();
+        List<UserDto> userDtoList = new ArrayList<>();
+
+        for (User user : userList) {
+            UserDto dto = new UserDto();
+            dto.setEmail(user.getUsername());
+            dto.setFullname(user.getFullName());
+            dto.setPassword(user.getPassword());
+            dto.setId(user.getId());
+            /*List<Role> roles = new ArrayList<>(user.getRoles());
+            dto.setRoles(roles.get(0).getName().name());*/
+
+            userDtoList.add(dto);
+        }
+
+        return userDtoList;
     }
 
 }
