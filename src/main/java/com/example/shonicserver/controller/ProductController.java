@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -62,5 +63,12 @@ public class ProductController {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    //softdelete
+    @PutMapping("/delete/{id}")
+    public ResponseEntity<Response> delete(@PathVariable("id") UUID id){
+        this.productService.delete(id);
+        return new ResponseEntity<>(new Response(200,"success",null,null), HttpStatus.OK);
     }
 }

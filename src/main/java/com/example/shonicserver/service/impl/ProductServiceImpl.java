@@ -32,6 +32,8 @@ public class ProductServiceImpl implements ProductService {
         product.setPrice(productDto.getPrice());
         product.setQty(productDto.getQty());
         product.setDate(product.getDate());
+        product.setDeleted(false);
+        
 
         //get brand byname
         String name = productDto.getBrand();
@@ -154,6 +156,11 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    @Override
+    public void delete(UUID id) {
+        productRepository.deleteById(id);
+    }
+
    /* @Override
     public FlashSaleDto insertFlashSale(FlashSaleDto flashSaleDto) {
         FlashSale flashSale=new FlashSale();
@@ -162,4 +169,5 @@ public class ProductServiceImpl implements ProductService {
         flashSale.setFlashSale(flashSale.getFlashSale());
         return null;
     }*/
+
 }
