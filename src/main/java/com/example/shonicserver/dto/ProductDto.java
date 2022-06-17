@@ -24,6 +24,7 @@ public class ProductDto {
     private Integer qty;
     private String category;
     private String brand;
+    private Boolean isDeleted;
     //private String image;
    // private Boolean imageFull;
    // private List<RatingDto> ratingDtoList;
