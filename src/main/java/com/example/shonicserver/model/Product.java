@@ -1,10 +1,13 @@
 package com.example.shonicserver.model;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.List;
 import java.util.UUID;
 @ToString
@@ -56,4 +59,6 @@ public class Product {
     // rating OneToMany
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Rating> ratingList;
+
+    private boolean isDeleted = Boolean.FALSE;
 }

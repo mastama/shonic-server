@@ -20,9 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -75,5 +74,12 @@ public class ProductController {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    //softdelete
+    @PutMapping("/delete/{id}")
+    public ResponseEntity<Response> delete(@PathVariable("id") UUID id){
+        this.productService.delete(id);
+        return new ResponseEntity<>(new Response(200,"success",null,null), HttpStatus.OK);
     }
 }

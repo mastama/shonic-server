@@ -32,6 +32,8 @@ public class ProductServiceImpl implements ProductService {
         product.setPrice(productDto.getPrice());
         product.setQty(productDto.getQty());
         product.setDate(product.getDate());
+        product.setDeleted(false);
+        
 
         //get brand byname
         String name = productDto.getBrand();
@@ -177,6 +179,7 @@ public class ProductServiceImpl implements ProductService {
             Optional<Product>existingProductOptional=productRepository.findById(productCreated.getId());
             Product existingProduct=existingProductOptional.get();
             Product productDtoCreated =new Product();
+            productDtoCreated.setId(existingProduct.getId());
             productDtoCreated.setName(existingProduct.getName());
             productDtoCreated.setQty(existingProduct.getQty());
             productDtoCreated.setPrice(existingProduct.getPrice());
@@ -212,8 +215,12 @@ public class ProductServiceImpl implements ProductService {
 
     }*/
 
-}
+    public void delete(UUID id) {
+        productRepository.deleteById(id);
+    }
 
+
+}
 
 
 
@@ -227,4 +234,6 @@ public class ProductServiceImpl implements ProductService {
         flashSale.setFlashSale(flashSale.getFlashSale());
         return null;
     }*/
+
+
 
