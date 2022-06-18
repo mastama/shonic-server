@@ -1,13 +1,11 @@
 package com.example.shonicserver.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
-
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -24,6 +22,7 @@ public class Brand {
     private String name;
 
     // oneToMany
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "brand")
     private List<Product> product;
 

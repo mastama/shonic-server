@@ -27,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
     public CreateProductResponse insert(ProductDto productDto) {
 
 
-        Product product=new Product();
+        Product product = new Product();
         product.setName(productDto.getName());
         product.setPrice(productDto.getPrice());
         product.setQty(productDto.getQty());
@@ -37,13 +37,12 @@ public class ProductServiceImpl implements ProductService {
         String name = productDto.getBrand();
         Optional<Brand> brandOptional = this.brandRepository.findByName(name);
         Brand brand;
-        if(brandOptional.isPresent()){
+        if (brandOptional.isPresent()) {
             brand = brandOptional.get();
-        }
-        else{
+        } else {
             Brand newBrand = new Brand();
             newBrand.setName(name);
-           brand = brandRepository.save(newBrand);
+            brand = brandRepository.save(newBrand);
         }
 
         product.setBrand(brand);
@@ -65,16 +64,15 @@ public class ProductServiceImpl implements ProductService {
         String nameCategory = productDto.getCategory();
         Optional<Categories> categoriesOptional = this.categoryRepository.findByName(nameCategory);
         Categories categories;
-        if(categoriesOptional.isPresent()){
+        if (categoriesOptional.isPresent()) {
             categories = categoriesOptional.get();
-        }
-        else{
-           Categories newCategory = new Categories();
-          newCategory.setName(nameCategory);
+        } else {
+            Categories newCategory = new Categories();
+            newCategory.setName(nameCategory);
             categories = categoryRepository.save(newCategory);
         }
 
-       product.setCategories(categories);
+        product.setCategories(categories);
 
 
         //create list rating
@@ -103,7 +101,7 @@ public class ProductServiceImpl implements ProductService {
 
         //dto product
         Product productInserted = productRepository.save(product);
-        CreateProductResponse productDtoInserted =new CreateProductResponse();
+        CreateProductResponse productDtoInserted = new CreateProductResponse();
         productDtoInserted.setName(productInserted.getName());
 
         productDtoInserted.setBrand(productInserted.getBrand());
@@ -154,6 +152,73 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    @Override
+    public Product getById(UUID id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        Product product = new Product();
+        if (productOptional.isPresent()) {
+            product = productOptional.get();
+            return convertProductToProductDto(product);
+        }
+       return null;
+    }
+    private Product convertProductToProductDto (Product productCreated) {
+        //create new
+        if (productCreated.getId() == null) {
+            Product productDtoCreated = new Product();
+            productDtoCreated.setPrice(productCreated.getPrice());
+            productDtoCreated.setQty(productCreated.getQty());
+            productDtoCreated.setName(productCreated.getName());
+            productDtoCreated.getBrand();
+            //productDtoCreated.getCategory();
+            return productDtoCreated;
+
+        }else {
+            Optional<Product>existingProductOptional=productRepository.findById(productCreated.getId());
+            Product existingProduct=existingProductOptional.get();
+            Product productDtoCreated =new Product();
+            productDtoCreated.setName(existingProduct.getName());
+            productDtoCreated.setQty(existingProduct.getQty());
+            productDtoCreated.setPrice(existingProduct.getPrice());
+
+            Brand brandDtoUpdate=new Brand();
+            brandDtoUpdate.setId(existingProduct.getBrand().getId());
+            brandDtoUpdate.setName(existingProduct.getBrand().getName());
+            productDtoCreated.setBrand(brandDtoUpdate);
+
+            Categories categoriesDtoUpdate=new Categories();
+            categoriesDtoUpdate.setCategoryId(existingProduct.getCategories().getCategoryId());
+            categoriesDtoUpdate.setName(existingProduct.getCategories().getName());
+            productDtoCreated.setCategories(categoriesDtoUpdate);
+            return productDtoCreated;
+        }
+
+
+
+    }
+
+   /* @Override
+    public List<ProductDto> findById(UUID id) {
+
+           Optional<Product> optionalProduct = productRepository.findById(id);
+           /*Product product;
+            if(optionalProduct.isPresent()) {
+                System.out.println("masuk sini");
+                return (List<ProductDto>) optionalProduct.get();
+            }else {
+                return null;
+            }
+
+
+    }*/
+
+}
+
+
+
+
+
+
    /* @Override
     public FlashSaleDto insertFlashSale(FlashSaleDto flashSaleDto) {
         FlashSale flashSale=new FlashSale();
@@ -162,4 +227,4 @@ public class ProductServiceImpl implements ProductService {
         flashSale.setFlashSale(flashSale.getFlashSale());
         return null;
     }*/
-}
+

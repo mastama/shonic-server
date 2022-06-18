@@ -1,10 +1,9 @@
 package com.example.shonicserver.dto;
 
 import com.example.shonicserver.model.Product;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -14,4 +13,6 @@ public class CategoriesDto {
     private Long categoryId;
     private String name;
     private ProductDto productDto;
+
+
 }

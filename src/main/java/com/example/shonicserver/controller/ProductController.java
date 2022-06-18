@@ -4,10 +4,15 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.shonicserver.dto.FlashSaleDto;
 import com.example.shonicserver.dto.ProductDto;
+import com.example.shonicserver.model.Product;
 import com.example.shonicserver.payload.Response;
 import com.example.shonicserver.payload.response.CreateProductResponse;
 import com.example.shonicserver.security.CustomOAuth2User;
 import com.example.shonicserver.service.ProductService;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -37,6 +45,11 @@ public class ProductController {
 
     }
 
+    @GetMapping("getById/{id}")
+    public ResponseEntity<Response> getOneProduct(@PathVariable UUID id) {
+      Product product=this.productService.getById(id);
+        return new ResponseEntity<>(new Response(200,"succsess",product,null),HttpStatus.OK);
+    }
    /* @PostMapping ("/insertFlashSale")
     public ResponseEntity<FlashSaleDto> insert(@RequestBody FlashSaleDto flashSaleDto){
         FlashSaleDto flashSaleDtoInsert=this.productService.insertFlashSale(flashSaleDto);

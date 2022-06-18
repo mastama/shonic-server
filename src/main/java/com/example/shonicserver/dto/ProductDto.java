@@ -4,15 +4,12 @@ import com.example.shonicserver.model.Brand;
 import com.example.shonicserver.model.Categories;
 import com.example.shonicserver.model.FlashSale;
 import com.example.shonicserver.model.Rating;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.List;
 
-
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -24,6 +21,7 @@ public class ProductDto {
     private Integer qty;
     private String category;
     private String brand;
+
     //private String image;
    // private Boolean imageFull;
    // private List<RatingDto> ratingDtoList;

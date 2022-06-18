@@ -1,15 +1,13 @@
 package com.example.shonicserver.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
-
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

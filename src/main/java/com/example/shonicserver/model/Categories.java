@@ -1,13 +1,11 @@
 package com.example.shonicserver.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
-
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -25,6 +23,7 @@ public class Categories {
         private String name;
 
         // foreign key
+        @JsonIgnore
         @OneToMany(mappedBy = "categories", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
         private List<Product> productList;
 
