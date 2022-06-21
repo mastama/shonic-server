@@ -4,6 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.shonicserver.dto.FlashSaleDto;
 import com.example.shonicserver.dto.ProductDto;
+import com.example.shonicserver.dto.ProductDtoCustom;
 import com.example.shonicserver.model.Product;
 import com.example.shonicserver.payload.Response;
 import com.example.shonicserver.payload.response.CreateProductResponse;
@@ -15,12 +16,15 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -82,4 +86,13 @@ public class ProductController {
         this.productService.delete(id);
         return new ResponseEntity<>(new Response(200,"success",null,null), HttpStatus.OK);
     }
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<Response> viewHomePage(Model model, @PathVariable("keyword") String keyword) {
+        List<ProductDtoCustom> listProducts = productService.listAll(keyword);
+        //model.addAttribute("listProducts", listProducts);
+        model.addAttribute("keyword", keyword);
+
+        return new ResponseEntity<>(new Response(200,"success",listProducts,null), HttpStatus.OK);
+    }
+
 }

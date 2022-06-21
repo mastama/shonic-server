@@ -38,12 +38,12 @@ public class Product {
 
     // categoryId OneToMany
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "categories")
     private Categories categories;
 
     // brandId ManyToOne
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "brand_id")
+    @JoinColumn(name = "brand")
     private Brand brand;
 
     // discountId OneToMany

@@ -1,10 +1,11 @@
 package com.example.shonicserver.service;
 
 import com.example.shonicserver.dto.ProductDto;
+import com.example.shonicserver.dto.ProductDtoCustom;
 import com.example.shonicserver.model.Product;
 import com.example.shonicserver.payload.response.CreateProductResponse;
-import java.util.UUID;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ProductService {
@@ -14,8 +15,9 @@ public interface ProductService {
 
    public Product getById(UUID id);
 
-    // List<Product> findById2(UUID id);
    void delete(UUID id);
 
-   //public FlashSaleDto insertFlashSale(FlashSaleDto flashSaleDto);
+   List<ProductDtoCustom> listAll(String keyword);
+
+    //public FlashSaleDto insertFlashSale(FlashSaleDto flashSaleDto);
 }

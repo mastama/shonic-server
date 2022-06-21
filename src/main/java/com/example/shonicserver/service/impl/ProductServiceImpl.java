@@ -219,6 +219,18 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
     }
 
+    @Override
+    public List<ProductDtoCustom> listAll(String keyword) {
+        if (keyword != null) {
+            System.out.println("masuk sini");
+            List<ProductDtoCustom>productList=productRepository.search(keyword);
+            return productList;
+        }
+        //return productRepository.findAll();
+        return null;
+
+    }
+
 
 }
 
