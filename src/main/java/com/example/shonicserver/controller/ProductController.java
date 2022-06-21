@@ -83,8 +83,11 @@ public class ProductController {
     //softdelete
     @PutMapping("/delete/{id}")
     public ResponseEntity<Response> delete(@PathVariable("id") UUID id){
-        this.productService.delete(id);
-        return new ResponseEntity<>(new Response(200,"success",null,null), HttpStatus.OK);
+        if( this.productService.delete(id)){
+            return new ResponseEntity<>(new Response(200,"success",null,null), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new Response(400,"BAD REQUEST",null,null), HttpStatus.BAD_REQUEST);
+
     }
     @GetMapping("/search/{keyword}")
     public ResponseEntity<Response> viewHomePage(Model model, @PathVariable("keyword") String keyword) {

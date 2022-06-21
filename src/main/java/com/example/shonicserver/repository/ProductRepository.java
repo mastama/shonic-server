@@ -18,13 +18,16 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     public List<Product> findProductById(
     @Param("id") UUID id);*/
 
-    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.name, p.price, p.qty,b.name,c.name) " +
+    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.date,p.image,p.name, p.price, p.qty,p.description,p.discount,r.rating,p.brand,p.categories) " +
             "FROM Product p " +
             "join Brand b " +
             "on p.brand = b.id " +
             "join Categories c " +
-            "on p.categories=c.id"+
-            " WHERE p.name LIKE %:keyword%"
-            + " OR b.name LIKE %:keyword%")
+            "on p.categories = c.id "+
+           "left join Rating r " +
+           "on r.product = p.id " +
+            " WHERE lower(p.name) LIKE %:keyword%"
+            + " OR lower(b.name) LIKE %:keyword%"
+            + " OR lower(c.name) LIKE %:keyword%"   )
     List<ProductDtoCustom> search(@Param("keyword") String keyword);
 }

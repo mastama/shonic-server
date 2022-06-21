@@ -15,7 +15,7 @@ public interface ProductService {
 
    public Product getById(UUID id);
 
-   void delete(UUID id);
+   Boolean delete(UUID id);
 
    List<ProductDtoCustom> listAll(String keyword);
 

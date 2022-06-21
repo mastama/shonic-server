@@ -36,19 +36,24 @@ public class Product {
     @Column(name = "date")
     private String date;
 
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "discount")
+    private Double discount;
     // categoryId OneToMany
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "categories")
     private Categories categories;
 
     // brandId ManyToOne
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "brand")
     private Brand brand;
 
     // discountId OneToMany
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FlashSale> discount;
+    private List<FlashSale> flashsale;
 
     @Column(name = "image")
     private String image;

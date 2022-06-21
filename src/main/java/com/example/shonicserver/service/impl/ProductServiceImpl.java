@@ -214,16 +214,23 @@ public class ProductServiceImpl implements ProductService {
 
 
     }*/
+    public Boolean delete(UUID id) {
+        Optional<Product> product=productRepository.findById(id);
+        if(product.isPresent()){
+            Product product1=product.get();
+            product1.setDeleted(true);
 
-    public void delete(UUID id) {
-        productRepository.deleteById(id);
+            productRepository.save(product1);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public List<ProductDtoCustom> listAll(String keyword) {
         if (keyword != null) {
             System.out.println("masuk sini");
-            List<ProductDtoCustom>productList=productRepository.search(keyword);
+            List<ProductDtoCustom>productList=productRepository.search(keyword.toLowerCase(Locale.ROOT));
             return productList;
         }
         //return productRepository.findAll();
