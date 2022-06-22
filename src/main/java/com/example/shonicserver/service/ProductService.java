@@ -17,7 +17,9 @@ public interface ProductService {
 
    Boolean delete(UUID id);
 
-   List<ProductDtoCustom> listAll(String keyword);
+   List<ProductDtoCustom> listAll(String keyword,int pageNo,int pageSize);
 
-    //public FlashSaleDto insertFlashSale(FlashSaleDto flashSaleDto);
+
+   //List<ProductDtoCustom> listAll(String keyword, int pageNo, int pageSize);
+
 }

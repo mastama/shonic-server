@@ -9,6 +9,8 @@ import com.example.shonicserver.repository.CategoryRepository;
 import com.example.shonicserver.repository.ProductRepository;
 import com.example.shonicserver.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -226,15 +228,30 @@ public class ProductServiceImpl implements ProductService {
         return false;
     }
 
-    @Override
-    public List<ProductDtoCustom> listAll(String keyword) {
+   /* @Override
+    public List<ProductDtoCustom> listAll(String keyword, int pageNo, int pageSize) {
+        Pageable pageable= PageRequest.of(pageNo-1,pageSize);
         if (keyword != null) {
             System.out.println("masuk sini");
-            List<ProductDtoCustom>productList=productRepository.search(keyword.toLowerCase(Locale.ROOT));
+            List<ProductDtoCustom>productList=productRepository.search(keyword.toLowerCase(Locale.ROOT).findAll(pageable).getContent());
             return productList;
         }
         //return productRepository.findAll();
         return null;
+
+    }*/
+
+    @Override
+   public List<ProductDtoCustom> listAll(String keyword,int pageNo,int pageSize) {
+        Pageable pageable= PageRequest.of(pageNo-1,pageSize);
+        if (keyword != null) {
+            //System.out.println("masuk sini");
+            List<ProductDtoCustom>productList=productRepository.search(keyword.toLowerCase(Locale.ROOT),pageable).getContent();
+            return productList;
+        }
+        //return productRepository.findAll();
+        List<ProductDtoCustom>productListByDate=productRepository.getProductByDate();
+        return productListByDate;
 
     }
 

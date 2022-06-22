@@ -8,6 +8,7 @@ import com.example.shonicserver.dto.ProductDtoCustom;
 import com.example.shonicserver.model.Product;
 import com.example.shonicserver.payload.Response;
 import com.example.shonicserver.payload.response.CreateProductResponse;
+import com.example.shonicserver.repository.ProductRepository;
 import com.example.shonicserver.security.CustomOAuth2User;
 import com.example.shonicserver.service.ProductService;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -36,6 +37,7 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
 
     @GetMapping("/test")
     public String home(){
@@ -86,16 +88,18 @@ public class ProductController {
         if( this.productService.delete(id)){
             return new ResponseEntity<>(new Response(200,"success",null,null), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new Response(400,"BAD REQUEST",null,null), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new Response(400,"Bad Request",null,null), HttpStatus.BAD_REQUEST);
 
     }
     @GetMapping("/search/{keyword}")
-    public ResponseEntity<Response> viewHomePage(Model model, @PathVariable("keyword") String keyword) {
-        List<ProductDtoCustom> listProducts = productService.listAll(keyword);
-        //model.addAttribute("listProducts", listProducts);
-        model.addAttribute("keyword", keyword);
+    public ResponseEntity<Response> viewHomePage(Model model, @PathVariable("keyword") String keyword,
+                                                 @RequestParam int pageNo,@RequestParam int pageSize) {
 
-        return new ResponseEntity<>(new Response(200,"success",listProducts,null), HttpStatus.OK);
+            List<ProductDtoCustom> listProducts = productService.listAll(keyword, pageNo, pageSize);
+            model.addAttribute("keyword", keyword);
+
+            return new ResponseEntity<>(new Response(200, "success", listProducts, null), HttpStatus.OK);
+
     }
 
 }
