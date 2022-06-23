@@ -17,7 +17,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "product")
-public class Product {
+public class Product extends BaseEntity{
 
     @Id
     @Column(name = "id")
@@ -33,14 +33,11 @@ public class Product {
     @Column(name = "qty",  length = 3)
     private Integer qty;
 
-    @Column(name = "date")
-    private String date;
-
     @Column(name = "description")
     private String description;
 
     @Column(name = "discount")
-    private Double discount;
+    private Integer discount;
     // categoryId OneToMany
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "categories")
@@ -59,11 +56,16 @@ public class Product {
     private String image;
 
     @Column(name = "image_full")
-    private Boolean imageFull;
+    private String imageFull;
+
+    private Float weight;
+
+    private Float rating;
 
     // rating OneToMany
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Rating> ratingList;
 
-    private boolean isDeleted = Boolean.FALSE;
+
+
 }

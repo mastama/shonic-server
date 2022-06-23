@@ -39,14 +39,17 @@ public class ProductController {
     private ProductService productService;
 
 
-    @GetMapping("/test")
-    public String home(){
-        return "home page";
-    }
     @PostMapping ("/insertProduct")
     public ResponseEntity<Response> insert(@RequestBody ProductDto productDto){
-       CreateProductResponse productDtoInsert=this.productService.insert(productDto);
-       return new ResponseEntity<>(new Response(201,"success",productDtoInsert,null), HttpStatus.CREATED);
+        try {
+            CreateProductResponse productDtoInsert=this.productService.insert(productDto);
+            return new ResponseEntity<>(new Response(201,"success",productDtoInsert,null), HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(new Response(500,"Fail create Product",null,null), HttpStatus.CREATED);
+        }
+
+
+
 
     }
 
@@ -73,9 +76,8 @@ public class ProductController {
                     "api_secret", "_PzqcDZmcTFu0fFtKLhs1SVnRd4"));
 
 
-            Map<String, Object> response = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+            Map response = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
             System.out.println("cek response");
-
             return (String) response.get("url");
         } catch (Exception e) {
             return null;

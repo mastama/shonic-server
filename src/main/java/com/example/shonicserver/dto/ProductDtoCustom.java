@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -14,14 +16,14 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ProductDtoCustom {
     private UUID id;
-    private String name;
-    private String createdAt;
+    private LocalDateTime createdAt;
     private String image;
+    private String name;
     private Integer price;
     private Integer qty;
     private String description;
-    private Double discount;
+    private Integer discount;
     private Integer rating;
-    private Brand branName;
-    private Categories categoryName;
+    private Brand brand;
+    private Categories category;
 }

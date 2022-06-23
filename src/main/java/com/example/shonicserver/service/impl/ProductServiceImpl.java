@@ -33,9 +33,12 @@ public class ProductServiceImpl implements ProductService {
         product.setName(productDto.getName());
         product.setPrice(productDto.getPrice());
         product.setQty(productDto.getQty());
-        product.setDate(product.getDate());
-        product.setDeleted(false);
-        
+        product.setDescription(productDto.getDescription());
+        product.setWeight(productDto.getWeight());
+
+        if(productDto.getDiscount() > 0 && productDto.getDiscount()<=100)
+        product.setDiscount(productDto.getDiscount());
+        else product.setDiscount(0);
 
         //get brand byname
         String name = productDto.getBrand();
@@ -51,20 +54,6 @@ public class ProductServiceImpl implements ProductService {
 
         product.setBrand(brand);
 
-        //product.setImage(productDto.getImage());
-
-        product.setImageFull(false);
-
-        //create list categories
-       /*List<Categories> categoriesList=new ArrayList<>();
-        for (CategoriesDto categoriesDto:productDto.getCategory()){
-            Categories categories=new Categories();
-            categories.setName(categoriesDto.getName());
-            categories.setProduct(product);
-            categoriesList.add(categories);
-
-
-        }*/
         String nameCategory = productDto.getCategory();
         Optional<Categories> categoriesOptional = this.categoryRepository.findByName(nameCategory);
         Categories categories;
@@ -75,33 +64,10 @@ public class ProductServiceImpl implements ProductService {
             newCategory.setName(nameCategory);
             categories = categoryRepository.save(newCategory);
         }
-
         product.setCategories(categories);
 
 
-        //create list rating
-        /*List<Rating>ratingList=new ArrayList<>();
-        for (RatingDto ratingDto:productDto.getRatingDtoList()){
-            Rating rating=new Rating();
-            rating.setRating(ratingDto.getRating());
-            rating.setUser(ratingDto.getUser());
-            rating.setProduct(product);
-            rating.setUlasan(ratingDto.getUlasan());
-            ratingList.add(rating);
-        }
-        product.setRatingList(ratingList);*/
-        //create list flashsale
-        /*List<FlashSale>flashSaleList=new ArrayList<>();
-        for (FlashSaleDto flashSaleDto:productDto.getDiscountDtoList()){
-            FlashSale flashSale=new FlashSale();
-            flashSale.setStartTime(flashSaleDto.getStartTime());
-            flashSale.setFinishTime(flashSaleDto.getFinishTime());
-            flashSale.setFlashSale(flashSaleDto.getFlashSale());
-            flashSale.setProduct(product);
-            flashSaleList.add(flashSale);
 
-        }
-        product.setDiscountList(flashSaleList);*/
 
         //dto product
         Product productInserted = productRepository.save(product);
@@ -202,20 +168,6 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-   /* @Override
-    public List<ProductDto> findById(UUID id) {
-
-           Optional<Product> optionalProduct = productRepository.findById(id);
-           /*Product product;
-            if(optionalProduct.isPresent()) {
-                System.out.println("masuk sini");
-                return (List<ProductDto>) optionalProduct.get();
-            }else {
-                return null;
-            }
-
-
-    }*/
     public Boolean delete(UUID id) {
         Optional<Product> product=productRepository.findById(id);
         if(product.isPresent()){
@@ -228,18 +180,6 @@ public class ProductServiceImpl implements ProductService {
         return false;
     }
 
-   /* @Override
-    public List<ProductDtoCustom> listAll(String keyword, int pageNo, int pageSize) {
-        Pageable pageable= PageRequest.of(pageNo-1,pageSize);
-        if (keyword != null) {
-            System.out.println("masuk sini");
-            List<ProductDtoCustom>productList=productRepository.search(keyword.toLowerCase(Locale.ROOT).findAll(pageable).getContent());
-            return productList;
-        }
-        //return productRepository.findAll();
-        return null;
-
-    }*/
 
     @Override
    public List<ProductDtoCustom> listAll(String keyword,int pageNo,int pageSize) {
@@ -247,11 +187,14 @@ public class ProductServiceImpl implements ProductService {
         if (keyword != null) {
             //System.out.println("masuk sini");
             List<ProductDtoCustom>productList=productRepository.search(keyword.toLowerCase(Locale.ROOT),pageable).getContent();
+            if(!productList.isEmpty())
             return productList;
         }
+        else{
+
+        }
         //return productRepository.findAll();
-        List<ProductDtoCustom>productListByDate=productRepository.getProductByDate();
-        return productListByDate;
+        return productRepository.getProductByDate();
 
     }
 
@@ -259,17 +202,6 @@ public class ProductServiceImpl implements ProductService {
 }
 
 
-
-
-
-   /* @Override
-    public FlashSaleDto insertFlashSale(FlashSaleDto flashSaleDto) {
-        FlashSale flashSale=new FlashSale();
-        flashSale.setFinishTime(flashSaleDto.getFinishTime());
-        flashSale.setStartTime(flashSaleDto.getStartTime());
-        flashSale.setFlashSale(flashSale.getFlashSale());
-        return null;
-    }*/
 
 
 
