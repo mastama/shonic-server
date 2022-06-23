@@ -24,5 +24,6 @@ public class ProductDto {
     private Float weight;
     private String description;
     private Integer discount;
+    private String imageUrl;
 
 }

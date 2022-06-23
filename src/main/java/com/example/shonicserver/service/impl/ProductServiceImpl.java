@@ -40,6 +40,20 @@ public class ProductServiceImpl implements ProductService {
         product.setDiscount(productDto.getDiscount());
         else product.setDiscount(0);
 
+        if(!(productDto.getImageUrl() == null || productDto.getImageUrl().isEmpty())){
+          String imageUrl = productDto.getImageUrl();
+          String url1 = imageUrl.substring(0,46);
+          String url2 = imageUrl.substring(47,imageUrl.length());
+          String resolusi = "/w_300,h_300/";
+          String urlMini = url1+resolusi+url2;
+
+            System.out.println(imageUrl);
+            System.out.println(urlMini);
+            product.setImage(urlMini);
+            product.setImageFull(imageUrl);
+        }
+
+
         //get brand byname
         String name = productDto.getBrand();
         Optional<Brand> brandOptional = this.brandRepository.findByName(name);

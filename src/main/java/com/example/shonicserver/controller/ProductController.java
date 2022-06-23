@@ -72,7 +72,7 @@ public class ProductController {
         try {
             //System.out.println(imporFile.getName());
             Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-                    "cloud_name", "dmiofvkur",
+                    "cloud_name", "shonic",
                     "api_key", "599463551394514",
                     "api_secret", "cEKvL2m5_V6cgkQUfIKddKe8v08"));
             Map response = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
