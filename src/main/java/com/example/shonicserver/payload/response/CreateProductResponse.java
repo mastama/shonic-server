@@ -21,5 +21,5 @@ public class CreateProductResponse {
     private Categories categoriesList;
     private Brand brand;
     private String image;
-    private Boolean imageFull;
+    private String imageFull;
 }

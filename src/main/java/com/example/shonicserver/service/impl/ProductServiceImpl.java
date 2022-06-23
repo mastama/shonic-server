@@ -65,9 +65,7 @@ public class ProductServiceImpl implements ProductService {
             categories = categoryRepository.save(newCategory);
         }
         product.setCategories(categories);
-
-
-
+        
 
         //dto product
         Product productInserted = productRepository.save(product);
@@ -77,47 +75,10 @@ public class ProductServiceImpl implements ProductService {
         productDtoInserted.setBrand(productInserted.getBrand());
         productDtoInserted.setQty(productInserted.getQty());
         productDtoInserted.setPrice(productInserted.getPrice());
-        //productDtoInserted.setImage(productDto.getImage());
+
         productDtoInserted.setId(productInserted.getId());
-        productDtoInserted.setImageFull(false);
-
-        //list categories Dto
-        /*List<CategoriesDto>categoriesDtoList=new ArrayList<>();
-        for (Categories categories:productInserted.getCategoriesList()){
-            CategoriesDto categoriesDto=new CategoriesDto();
-            categoriesDto.setName(categories.getName());
-            categoriesDto.setCategoryId(categories.getCategoryId());
-            categoriesDtoList.add(categoriesDto);
-
-
-        }*/
+        productDtoInserted.setImageFull(productInserted.getImageFull());
         productDtoInserted.setCategoriesList(product.getCategories());
-
-        //list rating
-        /*List<RatingDto>ratingDtoList=new ArrayList<>();
-        for (Rating rating:productInserted.getRatingList()){
-            RatingDto ratingDto=new RatingDto();
-            ratingDto.setRating(rating.getRating());
-            ratingDto.setUser(rating.getUser());
-            ratingDto.setId(rating.getId());
-            ratingDto.setUlasan(rating.getUlasan());
-            ratingDtoList.add(ratingDto);
-        }
-        productDtoInserted.setRatingDtoList(ratingDtoList);*/
-        //list discount(flash sale)
-        /*List<FlashSaleDto>flashSaleDtoList=new ArrayList<>();
-        for (FlashSale flashSale:productInserted.getDiscountList()){
-            FlashSaleDto flashSaleDto=new FlashSaleDto();
-            flashSaleDto.setStartTime(flashSale.getStartTime());
-            flashSaleDto.setFinishTime(flashSale.getFinishTime());
-            flashSaleDto.setFlashSale(flashSale.getFlashSale());
-            flashSaleDto.setId(flashSale.getId());
-            flashSaleDtoList.add(flashSaleDto);
-
-        }
-        productDtoInserted.setDiscountDtoList(flashSaleDtoList);*/
-
-
         return productDtoInserted;
 
     }
