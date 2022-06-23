@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -37,6 +38,9 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductRepository productRepository;
 
 
     @PostMapping ("/insertProduct/")
@@ -96,8 +100,32 @@ public class ProductController {
     public ResponseEntity<Response> searchByKeyword(@PathVariable("keyword") String keyword,
                                                  @RequestParam int pageNo,@RequestParam int pageSize) {
 
-            List<ProductDtoCustom> listProducts = productService.listAll(keyword, pageNo, pageSize);
-            return new ResponseEntity<>(new Response(200, "success", listProducts, null), HttpStatus.OK);
+        if(keyword==null || pageNo <= 0 ||pageSize <= 0){
+            return new ResponseEntity<>(new Response(400, "Invalid Params", null, null), HttpStatus.BAD_REQUEST);
+        }
+
+            List<ProductDtoCustom> listProducts = productService.findByKeyword(keyword, pageNo, pageSize);
+
+
+            Map<String,Object> result= new HashMap<>();
+
+            if(listProducts!=null){
+                System.out.println("true");
+                result.put("found",true);
+                result.put("product",listProducts);
+
+
+            }
+            else{
+                System.out.println("false");
+                listProducts = productRepository.getProductByDate();
+                result.put("found",false);
+                result.put("product",listProducts);
+
+            }
+
+        return new ResponseEntity<>(new Response(200, "success", result, null), HttpStatus.OK);
+
 
     }
 

@@ -155,21 +155,15 @@ public class ProductServiceImpl implements ProductService {
         return false;
     }
 
-
     @Override
-   public List<ProductDtoCustom> listAll(String keyword,int pageNo,int pageSize) {
+   public List<ProductDtoCustom> findByKeyword(String keyword,int pageNo,int pageSize) {
         Pageable pageable= PageRequest.of(pageNo-1,pageSize);
-        if (keyword != null) {
-            //System.out.println("masuk sini");
-            List<ProductDtoCustom>productList=productRepository.search(keyword.toLowerCase(Locale.ROOT),pageable).getContent();
-            if(!productList.isEmpty())
-            return productList;
-        }
-        else{
 
-        }
-        //return productRepository.findAll();
-        return productRepository.getProductByDate();
+        List<ProductDtoCustom>productList=productRepository.search(keyword.toLowerCase(Locale.ROOT),pageable).getContent();
+        if(!productList.isEmpty())
+            return productList;
+
+        return null;
 
     }
 

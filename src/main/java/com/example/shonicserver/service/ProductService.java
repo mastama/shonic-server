@@ -17,7 +17,7 @@ public interface ProductService {
 
    Boolean delete(UUID id);
 
-   List<ProductDtoCustom> listAll(String keyword,int pageNo,int pageSize);
+   List<ProductDtoCustom> findByKeyword(String keyword,int pageNo,int pageSize);
 
 
    //List<ProductDtoCustom> listAll(String keyword, int pageNo, int pageSize);
