@@ -39,17 +39,15 @@ public class ProductController {
     private ProductService productService;
 
 
-    @PostMapping ("/insertProduct")
-    public ResponseEntity<Response> insert(@RequestBody ProductDto productDto){
+    @PostMapping ("/insertProduct/")
+    public ResponseEntity<Response> createNewProduct(@RequestBody ProductDto productDto){
+
         try {
             CreateProductResponse productDtoInsert=this.productService.insert(productDto);
             return new ResponseEntity<>(new Response(201,"success",productDtoInsert,null), HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(new Response(500,"Fail create Product",null,null), HttpStatus.CREATED);
         }
-
-
-
 
     }
 
@@ -58,34 +56,35 @@ public class ProductController {
       Product product=this.productService.getById(id);
         return new ResponseEntity<>(new Response(200,"succsess",product,null),HttpStatus.OK);
     }
-   /* @PostMapping ("/insertFlashSale")
-    public ResponseEntity<FlashSaleDto> insert(@RequestBody FlashSaleDto flashSaleDto){
-        FlashSaleDto flashSaleDtoInsert=this.productService.insertFlashSale(flashSaleDto);
-        return new ResponseEntity<>(flashSaleDtoInsert, HttpStatus.CREATED);
 
-    }*/
-
-    @PostMapping("/upload")
-    public String getImage(@RequestParam("data") String data, @RequestParam(value = "file", required = false) MultipartFile file) {
+    @PostMapping("/imageUpload")
+    public ResponseEntity<Object> getImageUrl(@RequestParam(value = "file", required = false) MultipartFile file) {
+        String contentType = file.getContentType();
+            if(!(contentType.equals("image/png")
+                || contentType.equals("image/jpg")
+                || contentType.equals("image/jpeg"))){
+                return new ResponseEntity<>(new Response(400,"Pleas Upload Image File",null,null), HttpStatus.BAD_REQUEST);
+            }
+            if(file.getSize()>20000000){
+                return new ResponseEntity<>(new Response(400,"Image too Large",null,null), HttpStatus.BAD_REQUEST);
+            }
 
         try {
             //System.out.println(imporFile.getName());
             Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-                    "cloud_name", "dggqgo3rw",
-                    "api_key", "466689723189921",
-                    "api_secret", "_PzqcDZmcTFu0fFtKLhs1SVnRd4"));
-
-
+                    "cloud_name", "dmiofvkur",
+                    "api_key", "599463551394514",
+                    "api_secret", "cEKvL2m5_V6cgkQUfIKddKe8v08"));
             Map response = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-            System.out.println("cek response");
-            return (String) response.get("url");
+
+            return new ResponseEntity<>(new Response(200,"Upload Success",response.get("url"),null), HttpStatus.OK);
         } catch (Exception e) {
-            return null;
+            return new ResponseEntity<>(new Response(500,"Failed Upload File",null,null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     //softdelete
-    @PutMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Response> delete(@PathVariable("id") UUID id){
         if( this.productService.delete(id)){
             return new ResponseEntity<>(new Response(200,"success",null,null), HttpStatus.OK);
@@ -94,12 +93,10 @@ public class ProductController {
 
     }
     @GetMapping("/search/{keyword}")
-    public ResponseEntity<Response> viewHomePage(Model model, @PathVariable("keyword") String keyword,
+    public ResponseEntity<Response> searchByKeyword(@PathVariable("keyword") String keyword,
                                                  @RequestParam int pageNo,@RequestParam int pageSize) {
 
             List<ProductDtoCustom> listProducts = productService.listAll(keyword, pageNo, pageSize);
-            model.addAttribute("keyword", keyword);
-
             return new ResponseEntity<>(new Response(200, "success", listProducts, null), HttpStatus.OK);
 
     }

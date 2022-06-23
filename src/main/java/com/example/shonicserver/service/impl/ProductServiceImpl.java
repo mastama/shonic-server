@@ -65,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
             categories = categoryRepository.save(newCategory);
         }
         product.setCategories(categories);
-        
+
 
         //dto product
         Product productInserted = productRepository.save(product);
