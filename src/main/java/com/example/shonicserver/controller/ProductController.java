@@ -60,6 +60,11 @@ public class ProductController {
       Product product=this.productService.getById(id);
         return new ResponseEntity<>(new Response(200,"succsess",product,null),HttpStatus.OK);
     }
+    @GetMapping("/filter")
+    public  ResponseEntity<Response> getFilterProduct(@RequestParam int minPrice,@RequestParam int maxPrice){
+        List<ProductDtoCustom> listProducts= this.productService.getFilterByPrice(minPrice,maxPrice);
+        return new ResponseEntity<>(new Response(200,"success",listProducts,null),HttpStatus.OK);
+    }
 
     @PostMapping("/imageUpload")
     public ResponseEntity<Object> getImageUrl(@RequestParam(value = "file", required = false) MultipartFile file) {

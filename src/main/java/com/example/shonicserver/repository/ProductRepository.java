@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.UUID;
@@ -41,4 +42,15 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
         "on r.product = p.id " +
         "order by p.createdAt ASC")
     List<ProductDtoCustom>getProductByDate();
+
+    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.description,p.discount,r.rating,p.brand,p.categories) " +
+            "FROM Product p " +
+            "join Brand b " +
+            "on p.brand = b.id " +
+            "join Categories c " +
+            "on p.categories = c.id "+
+            "left join Rating r " +
+            "on r.product = p.id " +
+            "where p.price>=:minPrice and p.price <=:maxPrice")
+    List<ProductDtoCustom> getFilterPrice(@Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice);
 }

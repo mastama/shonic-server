@@ -171,6 +171,12 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    @Override
+    public List<ProductDtoCustom> getFilterByPrice(int minPrice, int maxPrice) {
+        List<ProductDtoCustom>productList=productRepository.getFilterPrice(minPrice,maxPrice);
+        return productList;
+    }
+
 
 }
 
