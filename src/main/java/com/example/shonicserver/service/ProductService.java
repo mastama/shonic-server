@@ -19,6 +19,8 @@ public interface ProductService {
 
    List<ProductDtoCustom> findByKeyword(String keyword,int pageNo,int pageSize);
 
+   List<ProductDtoCustom> getFilterByPrice(int minPrice, int maxPrice);
+
 
    //List<ProductDtoCustom> listAll(String keyword, int pageNo, int pageSize);
 
