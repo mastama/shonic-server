@@ -5,6 +5,7 @@ import com.example.shonicserver.dto.*;
 import com.example.shonicserver.model.*;
 import com.example.shonicserver.payload.response.CreateProductResponse;
 import com.example.shonicserver.repository.BrandRepository;
+import com.example.shonicserver.repository.CategoryParentRepository;
 import com.example.shonicserver.repository.CategoryRepository;
 import com.example.shonicserver.repository.ProductRepository;
 import com.example.shonicserver.service.ProductService;
@@ -24,6 +25,9 @@ public class ProductServiceImpl implements ProductService {
     private BrandRepository brandRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private CategoryParentRepository categoryParentRepository;
 
     @Override
     public CreateProductResponse insert(ProductDto productDto) {
@@ -78,12 +82,21 @@ public class ProductServiceImpl implements ProductService {
         if (categoriesOptional.isPresent()) {
             categories = categoriesOptional.get();
         } else {
+            CategoryParent categoryParent ;
+            Optional<CategoryParent> categoryParentOptional = this.categoryParentRepository.findByName(productDto.getCategoryParent());
+            if(categoryParentOptional.isPresent()){
+                categoryParent =categoryParentOptional.get();
+            }else {
+                CategoryParent newCategoryParent = new CategoryParent();
+                newCategoryParent.setName(productDto.getCategoryParent());
+                 categoryParent = categoryParentRepository.save(newCategoryParent);
+            }
             Categories newCategory = new Categories();
             newCategory.setName(nameCategory);
+            newCategory.setCategoryParent(categoryParent);
             categories = categoryRepository.save(newCategory);
         }
         product.setCategories(categories);
-
 
         //dto product
         Product productInserted = productRepository.save(product);

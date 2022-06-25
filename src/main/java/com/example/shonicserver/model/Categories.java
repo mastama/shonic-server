@@ -1,6 +1,7 @@
 package com.example.shonicserver.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,5 +27,12 @@ public class Categories {
         @JsonIgnore
         @OneToMany(mappedBy = "categories", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
         private List<Product> productList;
+
+        @JsonProperty("category_parent")
+        @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+        @JoinColumn(name = "parent")
+        private CategoryParent categoryParent;
+
+
 
 }
