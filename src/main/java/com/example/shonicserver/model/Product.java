@@ -33,7 +33,7 @@ public class Product extends BaseEntity{
     @Column(name = "qty",  length = 3)
     private Integer qty;
 
-    @Column(name = "description")
+    @Column(name = "description",length = 5000)
     private String description;
 
     @Column(name = "discount")
