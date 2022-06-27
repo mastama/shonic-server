@@ -8,6 +8,7 @@ import com.example.shonicserver.payload.response.CreateProductResponse;
 import com.example.shonicserver.repository.ProductRepository;
 import com.example.shonicserver.service.ProductService;
 import io.swagger.annotations.Api;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,32 +50,26 @@ public class ProductController {
 
     //softdelete
 
-    @GetMapping("/search/{keyword}")
-    public ResponseEntity<Response> searchByKeyword(@PathVariable("keyword") String keyword,
+    @GetMapping("/search")
+    public ResponseEntity<Response> searchByKeyword(@RequestParam(value = "keyword") String keyword,
                                                  @RequestParam int pageNo,@RequestParam int pageSize) {
 
-        if(keyword==null || pageNo <= 0 ||pageSize <= 0){
+        if(pageNo <= 0 ||pageSize <= 0 || keyword == null){
             return new ResponseEntity<>(new Response(400, "Invalid Params", null, null), HttpStatus.BAD_REQUEST);
         }
+        String nullValue = RandomStringUtils.randomAlphanumeric(10);
 
             List<ProductDtoCustom> listProducts = productService.findByKeyword(keyword, pageNo, pageSize);
-
-
             Map<String,Object> result= new HashMap<>();
 
             if(listProducts!=null){
-                System.out.println("true");
                 result.put("found",true);
                 result.put("product",listProducts);
-
-
             }
             else{
-                System.out.println("false");
                 listProducts = productRepository.getProductByDate();
                 result.put("found",false);
                 result.put("product",listProducts);
-
             }
 
         return new ResponseEntity<>(new Response(200, "success", result, null), HttpStatus.OK);
