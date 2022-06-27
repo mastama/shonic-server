@@ -64,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
 
 
         //get brand byname
-        String name = productDto.getBrand().toLowerCase();
+        String name = productDto.getBrand();
         Optional<Brand> brandOptional = this.brandRepository.findByName(name);
         Brand brand;
         if (brandOptional.isPresent()) {
