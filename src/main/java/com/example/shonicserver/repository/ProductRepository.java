@@ -19,7 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     public List<Product> findProductById(
     @Param("id") UUID id);*/
 
-    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.description,p.discount,r.rating,p.brand,p.categories) " +
+    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.discount,r.rating,p.brand,p.categories,p.review) " +
             "FROM Product p " +
             "join Brand b " +
             "on p.brand = b.id " +
@@ -32,7 +32,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             + " OR lower(c.name) LIKE %:keyword%"   )
     Page<ProductDtoCustom> search(@Param("keyword") String keyword, Pageable pageable);
 
-@Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.description,p.discount,r.rating,p.brand,p.categories) " +
+@Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.discount,r.rating,p.brand,p.categories,p.review) " +
         "FROM Product p " +
         "join Brand b " +
         "on p.brand = b.id " +
@@ -43,7 +43,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
         "order by p.createdAt ASC")
     List<ProductDtoCustom>getProductByDate();
 
-    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.description,p.discount,r.rating,p.brand,p.categories) " +
+    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.discount,r.rating,p.brand,p.categories,p.review) " +
             "FROM Product p " +
             "join Brand b " +
             "on p.brand = b.id " +

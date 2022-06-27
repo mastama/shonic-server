@@ -64,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
 
 
         //get brand byname
-        String name = productDto.getBrand();
+        String name = productDto.getBrand().toLowerCase();
         Optional<Brand> brandOptional = this.brandRepository.findByName(name);
         Brand brand;
         if (brandOptional.isPresent()) {
@@ -77,19 +77,19 @@ public class ProductServiceImpl implements ProductService {
 
         product.setBrand(brand);
 
-        String nameCategory = productDto.getCategory();
+        String nameCategory = productDto.getCategory().toLowerCase();
         Optional<Categories> categoriesOptional = this.categoryRepository.findByName(nameCategory);
         Categories categories;
         if (categoriesOptional.isPresent()) {
             categories = categoriesOptional.get();
         } else {
             CategoryParent categoryParent ;
-            Optional<CategoryParent> categoryParentOptional = this.categoryParentRepository.findByName(productDto.getCategoryParent());
+            Optional<CategoryParent> categoryParentOptional = this.categoryParentRepository.findByName(productDto.getCategoryParent().toLowerCase());
             if(categoryParentOptional.isPresent()){
                 categoryParent =categoryParentOptional.get();
             }else {
                 CategoryParent newCategoryParent = new CategoryParent();
-                newCategoryParent.setName(productDto.getCategoryParent());
+                newCategoryParent.setName(productDto.getCategoryParent().toLowerCase());
                  categoryParent = categoryParentRepository.save(newCategoryParent);
             }
             Categories newCategory = new Categories();
