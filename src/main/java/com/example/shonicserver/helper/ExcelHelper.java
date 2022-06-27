@@ -40,10 +40,7 @@ public class ExcelHelper {
                 ProductDto product = new ProductDto();
                 int cellIdx = 0;
                 while (cellsInRow.hasNext()) {
-
-                    System.out.println("row "+ rowNumber + " cell "+cellIdx);
                     Cell currentCell = cellsInRow.next();
-
                     switch (cellIdx) {
                         case 1:
                             if(currentCell.getStringCellValue().isEmpty())
@@ -84,7 +81,6 @@ public class ExcelHelper {
                     }
                     cellIdx++;
                 }
-                System.out.println(product);
                 products.add(product);
                     rowNumber++;
             }

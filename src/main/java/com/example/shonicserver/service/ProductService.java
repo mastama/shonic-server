@@ -23,7 +23,7 @@ public interface ProductService {
    List<ProductDtoCustom> getFilterByPrice(int minPrice, int maxPrice);
 
 
-
+   void deleteAllProduct();
 
    //List<ProductDtoCustom> listAll(String keyword, int pageNo, int pageSize);
 

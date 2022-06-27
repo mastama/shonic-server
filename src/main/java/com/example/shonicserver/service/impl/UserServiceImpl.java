@@ -1,7 +1,6 @@
 package com.example.shonicserver.service.impl;
 import com.example.shonicserver.dto.RegisterDto;
 import com.example.shonicserver.model.User;
-import com.example.shonicserver.dto.UserDto;
 import com.example.shonicserver.model.ERole;
 import com.example.shonicserver.model.Role;
 import com.example.shonicserver.payload.response.UserResponse;
@@ -57,6 +56,29 @@ public class UserServiceImpl implements UserService {
             userResponse.setEmail(userSaved.getUsername());
             userResponse.setFullName(userSaved.getFullName());
         return userResponse;
+    }
+
+    public Optional<User> findByEmail(String email){
+        return userRepository.findByUsername(email);
+    }
+
+    public void makeAsAdmin(User user){
+        Optional<Role> roleOptional = roleRepository.findByName(ERole.ROLE_ADMIN);
+        Role roleAdmin;
+        if(roleOptional.isPresent()){
+            roleAdmin = roleOptional.get();
+        }else{
+            Role role = new Role();
+            role.setName(ERole.ROLE_ADMIN);
+            roleAdmin = roleRepository.save(role);
+        }
+        Role roleCustomer = roleRepository.findByName(ERole.ROLE_CUSTOMER).get();
+        Set<Role> newRole = new HashSet<>();
+        newRole.add(roleAdmin);
+        newRole.add(roleCustomer);
+        user.setRoles(newRole);
+        userRepository.save(user);
+
     }
 
 }
