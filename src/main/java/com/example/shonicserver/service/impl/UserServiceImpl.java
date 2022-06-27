@@ -1,7 +1,6 @@
 package com.example.shonicserver.service.impl;
 import com.example.shonicserver.dto.RegisterDto;
 import com.example.shonicserver.model.User;
-import com.example.shonicserver.dto.UserDto;
 import com.example.shonicserver.model.ERole;
 import com.example.shonicserver.model.Role;
 import com.example.shonicserver.payload.response.UserResponse;
@@ -58,24 +57,27 @@ public class UserServiceImpl implements UserService {
         return userResponse;
     }
 
-    @Override
-    public List<UserDto> getAll() {
-        List<User> userList = this.userRepository.findAll();
-        List<UserDto> userDtoList = new ArrayList<>();
+    public Optional<User> findByEmail(String email){
+        return userRepository.findByUsername(email);
+    }
 
-        for (User user : userList) {
-            UserDto dto = new UserDto();
-            dto.setEmail(user.getUsername());
-            dto.setFullname(user.getFullName());
-            dto.setPassword(user.getPassword());
-            dto.setId(user.getId());
-            /*List<Role> roles = new ArrayList<>(user.getRoles());
-            dto.setRoles(roles.get(0).getName().name());*/
-
-            userDtoList.add(dto);
+    public void makeAsAdmin(User user){
+        Optional<Role> roleOptional = roleRepository.findByName(ERole.ROLE_ADMIN);
+        Role roleAdmin;
+        if(roleOptional.isPresent()){
+            roleAdmin = roleOptional.get();
+        }else{
+            Role role = new Role();
+            role.setName(ERole.ROLE_ADMIN);
+            roleAdmin = roleRepository.save(role);
         }
+        Role roleCustomer = roleRepository.findByName(ERole.ROLE_CUSTOMER).get();
+        Set<Role> newRole = new HashSet<>();
+        newRole.add(roleAdmin);
+        newRole.add(roleCustomer);
+        user.setRoles(newRole);
+        userRepository.save(user);
 
-        return userDtoList;
     }
 
 }

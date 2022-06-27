@@ -3,9 +3,7 @@ import com.alibaba.fastjson.JSON;
 import com.example.shonicserver.dto.JwtResponseDto;
 import com.example.shonicserver.dto.LoginDto;
 import com.example.shonicserver.dto.RegisterDto;
-import com.example.shonicserver.dto.UserDto;
 import com.example.shonicserver.model.User;
-import com.example.shonicserver.payload.Response;
 import com.example.shonicserver.payload.response.UserResponse;
 import com.example.shonicserver.repository.UserRepository;
 import com.example.shonicserver.service.JpaUserDetailsService;
@@ -40,12 +38,6 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<UserDto>> getAll() {
-        List<UserDto> userDtoList = this.userService.getAll();
-
-        return new ResponseEntity<>(userDtoList, HttpStatus.OK);
-    }
     @PostMapping("/login")
     public ResponseEntity<JwtResponseDto> login(@RequestBody LoginDto loginDto) throws Exception {
         // authenticate the user

@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User{
 
     @Id
     @Column(name = "id")
@@ -26,6 +26,7 @@ public class User {
     // username as email uniq
    @Column(name = "email")
    private String username;
+
 
     // email unique
    /* @Column(name = "email", nullable = false)
@@ -58,6 +59,11 @@ public class User {
     public void setProvider(Provider provider) {
         this.provider = provider;
     }
+    // rating
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Rating rating;
+
 
     public String getFullName() {
         return fullname;

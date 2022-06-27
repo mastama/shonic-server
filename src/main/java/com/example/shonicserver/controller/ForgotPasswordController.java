@@ -117,6 +117,25 @@ public class ForgotPasswordController {
         }
     }
 
+
+//    @PostMapping("/reset_password")
+//    public String processResetPassword(HttpServletRequest request, Model model) {
+//        String token = request.getParameter("token");
+//        String newPassword = request.getParameter("new_password");
+//
+//        User user = userServices.getByResetPasswordToken(token).get();
+//        model.addAttribute("title", "Reset Password");
+//
+//        if (user != null) {
+//            model.addAttribute("message", "Invalid token.");
+//            return "message";
+//        } else {
+//            userServices.updatePassword(user, newPassword);
+//            model.addAttribute("message", "Password updated successfully.");
+//        }
+//        return "message";
+//    }
+
     @PostMapping("/reset_password")
     public ResponseEntity<String> processResetPassword(@RequestBody ResetPassword resetPassword) {
         String token = resetPassword.getToken();
