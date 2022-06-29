@@ -18,7 +18,7 @@ public interface ProductService {
 
    Boolean delete(UUID id);
 
-   List<ProductDtoCustom> findByKeyword(String keyword,int pageNo,int pageSize,Integer minPrice,Integer maxPrice);
+   List<ProductDtoCustom> findByKeyword(String keyword,int pageNo,int pageSize,Integer minPrice,Integer maxPrice,Float rating);
 
    List<ProductDtoCustom> getFilterByPrice(int minPrice, int maxPrice);
 

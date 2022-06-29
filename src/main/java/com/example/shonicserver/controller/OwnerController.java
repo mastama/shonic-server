@@ -34,10 +34,10 @@ public class OwnerController {
 
     @Autowired
     private UserService userService;
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/product/uploadProduct")
     public ResponseEntity<Response> uploadProductFile(@RequestParam("sheet_name") String sheet ,@RequestParam("file") MultipartFile file) {
-        superadmin();
+//        superadmin();
         String message = "";
         if (ExcelHelper.hasExcelFormat(file)) {
             try {

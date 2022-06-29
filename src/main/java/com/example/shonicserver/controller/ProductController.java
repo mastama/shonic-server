@@ -54,20 +54,31 @@ public class ProductController {
     public ResponseEntity<Response> searchByKeyword(@RequestParam(value = "keyword") String keyword,
                                                  @RequestParam int pageNo,@RequestParam int pageSize,
                                                     @RequestParam (value="minPrice",required = false)Integer minPrice,
-                                                    @RequestParam(value = "maxPrice",required = false) Integer maxPrice) {
+                                                    @RequestParam(value = "maxPrice",required = false) Integer maxPrice,
+                                                    @RequestParam(value = "is4StarRating",required = false) Boolean is4StarRating
+                                                    ) {
 
         if(pageNo <= 0 ||pageSize <= 0 || keyword == null){
             return new ResponseEntity<>(new Response(400, "Invalid Params", null, null), HttpStatus.BAD_REQUEST);
         }
         String nullValue = RandomStringUtils.randomAlphanumeric(10);
 
-            if(minPrice==null && maxPrice==null){
-                minPrice=0;
-                maxPrice=1000000000;
+        if(minPrice==null){
+            minPrice=0;
+        }
+        if(maxPrice==null){
+            maxPrice=1000000000;
+        }
+        Float rating ;
+        if(is4StarRating==null || !is4StarRating){
+            rating = (float) 0;
+        }else {
+            rating = 4F;
+        }
+        System.out.println(rating);
+        System.out.println(is4StarRating);
 
-            }
-
-            List<ProductDtoCustom> listProducts = productService.findByKeyword(keyword, pageNo, pageSize,minPrice,maxPrice);
+            List<ProductDtoCustom> listProducts = productService.findByKeyword(keyword, pageNo, pageSize,minPrice,maxPrice, rating);
             Map<String,Object> result= new HashMap<>();
 
             /*List<ProductDtoCustom> listProductsminMax= this.productService.getFilterByPrice(minPrice,maxPrice);

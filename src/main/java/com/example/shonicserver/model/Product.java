@@ -61,10 +61,8 @@ public class Product extends BaseEntity{
     @Column(nullable = false)
     private Float weight;
 
-    @Column(columnDefinition = "integer default 0")
     private Float rating;
 
-    @Column(columnDefinition = "integer default 0")
     private Integer review;
 
     // rating OneToMany
