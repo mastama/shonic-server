@@ -52,25 +52,42 @@ public class ProductController {
 
     @GetMapping("/search")
     public ResponseEntity<Response> searchByKeyword(@RequestParam(value = "keyword") String keyword,
-                                                 @RequestParam int pageNo,@RequestParam int pageSize) {
+                                                 @RequestParam int pageNo,@RequestParam int pageSize,
+                                                    @RequestParam (value="minPrice",required = false)Integer minPrice,
+                                                    @RequestParam(value = "maxPrice",required = false) Integer maxPrice) {
 
         if(pageNo <= 0 ||pageSize <= 0 || keyword == null){
             return new ResponseEntity<>(new Response(400, "Invalid Params", null, null), HttpStatus.BAD_REQUEST);
         }
         String nullValue = RandomStringUtils.randomAlphanumeric(10);
 
-            List<ProductDtoCustom> listProducts = productService.findByKeyword(keyword, pageNo, pageSize);
+            if(minPrice==null && maxPrice==null){
+                minPrice=0;
+                maxPrice=1000000000;
+
+            }
+
+            List<ProductDtoCustom> listProducts = productService.findByKeyword(keyword, pageNo, pageSize,minPrice,maxPrice);
             Map<String,Object> result= new HashMap<>();
+
+            /*List<ProductDtoCustom> listProductsminMax= this.productService.getFilterByPrice(minPrice,maxPrice);
+            Map<String,Object> shortprice= new HashMap<>();*/
 
             if(listProducts!=null){
                 result.put("found",true);
                 result.put("product",listProducts);
-            }
+            }/*else if (listProducts!=null&& minPrice!=null&&maxPrice!=null){
+                listProducts=productRepository.getFilterPrice(minPrice,maxPrice);
+                shortprice.put("found",true);
+                shortprice.put("product",listProducts);
+
+            }*/
             else{
                 listProducts = productRepository.getProductByDate();
                 result.put("found",false);
                 result.put("product",listProducts);
             }
+
 
         return new ResponseEntity<>(new Response(200, "success", result, null), HttpStatus.OK);
 

@@ -118,7 +118,7 @@ public class OwnerController {
 
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping ("/product/insertProduct")
     public ResponseEntity<Response> createNewProduct(@RequestBody ProductDto productDto){
         superadmin();

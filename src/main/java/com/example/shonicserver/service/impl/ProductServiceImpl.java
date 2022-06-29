@@ -174,10 +174,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-   public List<ProductDtoCustom> findByKeyword(String keyword,int pageNo,int pageSize) {
+   public List<ProductDtoCustom> findByKeyword(String keyword,int pageNo,int pageSize,Integer minPrice,Integer maxPrice) {
         Pageable pageable= PageRequest.of(pageNo-1,pageSize);
 
-        List<ProductDtoCustom>productList=productRepository.search(keyword.toLowerCase(Locale.ROOT),pageable).getContent();
+        List<ProductDtoCustom>productList=productRepository.search(keyword.toLowerCase(Locale.ROOT),pageable,minPrice,maxPrice).getContent();
         if(!productList.isEmpty())
             return productList;
 
