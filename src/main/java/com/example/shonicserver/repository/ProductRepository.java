@@ -1,5 +1,7 @@
 package com.example.shonicserver.repository;
 
+import com.example.shonicserver.dto.BranDtoCustom;
+import com.example.shonicserver.dto.CategoryDtoCustom;
 import com.example.shonicserver.dto.ProductDtoCustom;
 import com.example.shonicserver.model.*;
 import org.springframework.data.domain.Page;
@@ -53,4 +55,15 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "on r.product = p.id " +
             "where p.price>=:minPrice and p.price <=:maxPrice")
     List<ProductDtoCustom> getFilterPrice(@Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice);
+    @Query(value = "SELECT new com.example.shonicserver.dto.BranDtoCustom(b.id,b.name)" +
+            "from Brand b " +
+            "where b.name=:brand")
+    List<BranDtoCustom>getByBrand(@Param("brand") String brand);
+
+    @Query(value = "SELECT new com.example.shonicserver.dto.CategoryDtoCustom(c.categoryId,c.name,cp.id)" +
+            "from Categories c " +
+            "join CategoryParent cp " +
+            "on cp.id = c.categoryParent " +
+            "where c.name=:category")
+    List<CategoryDtoCustom> getByCategory(@Param("category") String category);
 }

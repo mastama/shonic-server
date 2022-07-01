@@ -1,5 +1,7 @@
 package com.example.shonicserver.controller;
 
+import com.example.shonicserver.dto.BranDtoCustom;
+import com.example.shonicserver.dto.CategoryDtoCustom;
 import com.example.shonicserver.dto.ProductDto;
 import com.example.shonicserver.dto.ProductDtoCustom;
 import com.example.shonicserver.model.Product;
@@ -46,7 +48,16 @@ public class ProductController {
 //        return new ResponseEntity<>(new Response(200,"success",listProducts,null),HttpStatus.OK);
 //    }
 
-
+    @GetMapping("/getByBrad")
+    public ResponseEntity<Response>getByBrand(@RequestParam String brand){
+        List<BranDtoCustom>branDtoCustom=this.productService.getByBrand(brand);
+        return new ResponseEntity<>(new Response(200,"succsess",branDtoCustom,null),HttpStatus.OK);
+    }
+    @GetMapping("/getCategory")
+    public ResponseEntity<Response>getByCategory(@RequestParam String category){
+        List<CategoryDtoCustom>categoryDtoCustoms=this.productService.getByCategory(category);
+        return new ResponseEntity<>(new Response(200,"succsess",categoryDtoCustoms,null),HttpStatus.OK);
+    }
 
     //softdelete
 
