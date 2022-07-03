@@ -8,6 +8,8 @@ import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 @ToString
@@ -24,10 +26,10 @@ public class Product extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "name",  unique = true)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "price" ,nullable = false)
+    @Column(name = "price")
     private Integer price;
 
     @Column(name = "qty",  length = 3)
@@ -36,7 +38,6 @@ public class Product extends BaseEntity{
     @Column(name = "description",length = 5000)
     private String description;
 
-    @Column(columnDefinition = "integer default 0")
     private Integer discount;
     // categoryId OneToMany
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -60,15 +61,19 @@ public class Product extends BaseEntity{
 
     @Column(nullable = false)
     private Float weight;
-
     private Float rating;
-
     private Integer review;
 
     // rating OneToMany
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Rating> ratingList;
 
-
+    @PrePersist
+    protected void prePersistProduct() {
+        float rating = (float) ((Math.random() * (5.0 - 3.0)) + 3.0);
+        DecimalFormat df = new DecimalFormat("#.##");
+        this.review = (int) ((Math.random() * (100)) + 1);
+        this.rating = Float.valueOf(df.format(rating));
+    }
 
 }

@@ -19,7 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     public List<Product> findProductById(
     @Param("id") UUID id);*/
 
-    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.discount,p.rating,p.brand,p.categories,p.review) " +
+    @Query(value = "SELECT p " +
             "FROM Product p " +
             "join Brand b " +
             "on p.brand = b.id " +
@@ -30,52 +30,68 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             " WHERE ( lower(p.name) LIKE %:keyword%"
             + " OR lower(b.name) LIKE %:keyword%"
             + " OR lower(c.name) LIKE %:keyword%) AND (p.price>=:minPrice and p.price <=:maxPrice)"
-            + " AND p.rating >= :rating")
-    Page<ProductDtoCustom> search(@Param("keyword") String keyword, Pageable pageable,@Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice,@Param("rating")Float rating);
+            + " AND (p.rating >= :rating)"
+            + " AND (p.discount >= :discount)")
+    Page<Product> search(@Param("keyword") String keyword, Pageable pageable,@Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice,@Param("rating") Float rating,@Param("discount")Integer discount);
 
-@Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.discount,p.rating,p.brand,p.categories,p.review) " +
+    @Query(value = "SELECT p " +
+            "FROM Product p " +
+            "join Brand b " +
+            "on p.brand = b.id " +
+            "join Categories c " +
+            "on p.categories = c.id "+
+            "left join Rating r " +
+            "on r.product = p.id " +
+            " WHERE ( lower(p.name) LIKE %:keyword%"
+            + " OR lower(b.name) LIKE %:keyword%"
+            + " OR lower(c.name) LIKE %:keyword%) AND (p.price>=:minPrice and p.price <=:maxPrice)"
+            + " AND (p.rating >= :rating)"
+            + " AND (p.discount >= :discount)"
+            + " order by p.createdAt DESC")
+    Page<Product> searchSortDate(@Param("keyword") String keyword, Pageable pageable,@Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice,@Param("rating") Float rating,@Param("discount")Integer discount);
+
+
+    @Query(value = "SELECT p " +
+            "FROM Product p " +
+            "join Brand b " +
+            "on p.brand = b.id " +
+            "join Categories c " +
+            "on p.categories = c.id "+
+            "left join Rating r " +
+            "on r.product = p.id " +
+            " WHERE ( lower(p.name) LIKE %:keyword%"
+            + " OR lower(b.name) LIKE %:keyword%"
+            + " OR lower(c.name) LIKE %:keyword%) AND (p.price>=:minPrice and p.price <=:maxPrice)"
+            + " AND (p.rating >= :rating)"
+            + " AND (p.discount >= :discount)"
+            + " order by p.price DESC")
+    Page<Product> searchSortPriceDesc(@Param("keyword") String keyword, Pageable pageable,@Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice,@Param("rating") Float rating,@Param("discount")Integer discount);
+
+
+    @Query(value = "SELECT p " +
+            "FROM Product p " +
+            "join Brand b " +
+            "on p.brand = b.id " +
+            "join Categories c " +
+            "on p.categories = c.id "+
+            "left join Rating r " +
+            "on r.product = p.id " +
+            " WHERE ( lower(p.name) LIKE %:keyword%"
+            + " OR lower(b.name) LIKE %:keyword%"
+            + " OR lower(c.name) LIKE %:keyword%) AND (p.price>=:minPrice and p.price <=:maxPrice)"
+            + " AND (p.rating >= :rating)"
+            + " AND (p.discount >= :discount)"
+            + " order by p.price ASC")
+    Page<Product> searchSortPriceAsc(@Param("keyword") String keyword, Pageable pageable,@Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice,@Param("rating") Float rating,@Param("discount")Integer discount);
+    @Query(value = "SELECT p " +
         "FROM Product p " +
         "join Brand b " +
         "on p.brand = b.id " +
         "join Categories c " +
         "on p.categories = c.id "+
-        "left join Rating r " +
-        "on r.product = p.id " +
-        "order by p.createdAt ASC")
-    List<ProductDtoCustom>getProductByDate();
-
-    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.discount,p.rating,p.brand,p.categories,p.review) " +
-            "FROM Product p " +
-            "join Brand b " +
-            "on p.brand = b.id " +
-            "join Categories c " +
-            "on p.categories = c.id "+
-            "left join Rating r " +
-            "on r.product = p.id " +
-            "where p.price>=:minPrice and p.price <=:maxPrice")
-    List<ProductDtoCustom> getFilterPrice(@Param("") Integer minPrice,@Param("maxPrice") Integer maxPrice);
-
-    // sory by low price
-    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.description,p.discount,r.rating,p.brand,p.categories) " +
-            "FROM Product p " +
-            "join Brand b " +
-            "on p.brand = b.id " +
-            "join Categories c " +
-            "on p.categories = c.id "+
-            "left join Rating r " +
-            "on r.product = p.id " +
-            "order by p.price ASC")
-    List<ProductDtoCustom> getProductByPrice();
-
-    // sort by high price
-    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.description,p.discount,r.rating,p.brand,p.categories) " +
-            "FROM Product p " +
-            "join Brand b " +
-            "on p.brand = b.id " +
-            "join Categories c " +
-            "on p.categories = c.id "+
-            "left join Rating r " +
-            "on r.product = p.id " +
-            "order by p.price DESC")
-    List<ProductDtoCustom> getProductByPriceDesc();
+        "order by p.createdAt DESC")
+    Page<Product>getProductByDate(Pageable pageable);
 }
+
+
+

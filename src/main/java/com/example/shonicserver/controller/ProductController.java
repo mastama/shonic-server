@@ -1,10 +1,8 @@
 package com.example.shonicserver.controller;
 
-import com.example.shonicserver.dto.ProductDto;
-import com.example.shonicserver.dto.ProductDtoCustom;
-import com.example.shonicserver.model.Product;
+import com.example.shonicserver.dto.ProductDetailDTO;
+import com.example.shonicserver.dto.ProductListDTO;
 import com.example.shonicserver.payload.Response;
-import com.example.shonicserver.payload.response.CreateProductResponse;
 import com.example.shonicserver.repository.ProductRepository;
 import com.example.shonicserver.service.ProductService;
 import io.swagger.annotations.Api;
@@ -15,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -32,30 +27,26 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
-
-
-
     @GetMapping("getById/{id}")
     public ResponseEntity<Response> getOneProduct(@PathVariable UUID id) {
-      Product product=this.productService.getById(id);
-        return new ResponseEntity<>(new Response(200,"succsess",product,null),HttpStatus.OK);
+      ProductDetailDTO product=this.productService.getById(id);
+      if(product!=null){
+          return new ResponseEntity<>(new Response(200,"succsess",product,null),HttpStatus.OK);
+      }else return new ResponseEntity<>(new Response(400,"Product ID Not Found",null,null),HttpStatus.BAD_REQUEST);
+
     }
-//    @GetMapping("/filter")
-//    public  ResponseEntity<Response> getFilterProduct(@RequestParam int minPrice,@RequestParam int maxPrice){
-//        List<ProductDtoCustom> listProducts= this.productService.getFilterByPrice(minPrice,maxPrice);
-//        return new ResponseEntity<>(new Response(200,"success",listProducts,null),HttpStatus.OK);
-//    }
 
-
-
-    //softdelete
 
     @GetMapping("/search")
     public ResponseEntity<Response> searchByKeyword(@RequestParam(value = "keyword") String keyword,
-                                                 @RequestParam int pageNo,@RequestParam int pageSize,
-                                                    @RequestParam (value="minPrice",required = false)Integer minPrice,
-                                                    @RequestParam(value = "maxPrice",required = false) Integer maxPrice,
-                                                    @RequestParam(value = "is4StarRating",required = false) Boolean is4StarRating
+                                                 @RequestParam(value = "pageNo",defaultValue = "1") int pageNo,@RequestParam(value = "pageSize",defaultValue = "10") int pageSize,
+                                                    @RequestParam (value="filter_minPrice",required = false,defaultValue = "0")Integer minPrice,
+                                                    @RequestParam(value = "filter_maxPrice",required = false) Integer maxPrice,
+                                                    @RequestParam(value = "filter_4Star",required = false,defaultValue = "false") Boolean is4StarRating,
+                                                    @RequestParam(value = "filter_onlyDiscount",required = false,defaultValue = "false") Boolean onlyDiscount,
+                                                    @RequestParam(value = "sort_dateDesc",required = false,defaultValue = "false")Boolean sortbyDate,
+                                                    @RequestParam(value = "sort_priceDesc",required = false,defaultValue = "false")Boolean sortbyPriceDesc,
+                                                    @RequestParam(value = "sort_priceAsc",required = false,defaultValue = "false")Boolean sortbyPriceAsc
                                                     ) {
 
         if(pageNo <= 0 ||pageSize <= 0 || keyword == null){
@@ -69,40 +60,44 @@ public class ProductController {
         if(maxPrice==null){
             maxPrice=1000000000;
         }
-        Float rating ;
+
+        float rating ;
         if(is4StarRating==null || !is4StarRating){
             rating = (float) 0;
         }else {
             rating = 4F;
         }
-        System.out.println(rating);
-        System.out.println(is4StarRating);
 
-            List<ProductDtoCustom> listProducts = productService.findByKeyword(keyword, pageNo, pageSize,minPrice,maxPrice, rating);
-            Map<String,Object> result= new HashMap<>();
+        int discount= 0;
+        if(onlyDiscount){
+            discount = 1;
+        }
 
-            /*List<ProductDtoCustom> listProductsminMax= this.productService.getFilterByPrice(minPrice,maxPrice);
-            Map<String,Object> shortprice= new HashMap<>();*/
+        String sort = "relevan";
+        if((sortbyPriceDesc && sortbyPriceAsc)|| (sortbyPriceDesc && sortbyDate) || (sortbyDate && sortbyPriceAsc) ){
+            sort = "relevan";
+        } else if (sortbyDate) {
+            sort = "date";
+        } else if (sortbyPriceAsc) {
+            sort = "asc";
+        } else if (sortbyPriceDesc) {
+            sort = "desc";
+        }
 
-            if(listProducts!=null){
-                result.put("found",true);
-                result.put("product",listProducts);
-            }/*else if (listProducts!=null&& minPrice!=null&&maxPrice!=null){
-                listProducts=productRepository.getFilterPrice(minPrice,maxPrice);
-                shortprice.put("found",true);
-                shortprice.put("product",listProducts);
+        List<ProductListDTO> listProducts = productService.findByKeyword(keyword, pageNo, pageSize,minPrice,maxPrice, rating,discount,sort);
+        Map<String,Object> result= new HashMap<>();
 
-            }*/
-            else{
-                listProducts = productRepository.getProductByDate();
+        if(listProducts!=null ||  (listProducts ==null && pageNo>1)){
+            result.put("found",true);
+            result.put("product",listProducts);
+        }
+        else{
+                listProducts = productService.getNewestProduct(pageNo,pageSize);
                 result.put("found",false);
                 result.put("product",listProducts);
-            }
-
+        }
 
         return new ResponseEntity<>(new Response(200, "success", result, null), HttpStatus.OK);
-
-
     }
 
 }
