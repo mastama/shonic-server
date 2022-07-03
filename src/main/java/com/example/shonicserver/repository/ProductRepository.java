@@ -52,5 +52,29 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "left join Rating r " +
             "on r.product = p.id " +
             "where p.price>=:minPrice and p.price <=:maxPrice")
-    List<ProductDtoCustom> getFilterPrice(@Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice);
+    List<ProductDtoCustom> getFilterPrice(@Param("") Integer minPrice,@Param("maxPrice") Integer maxPrice);
+
+    // sory by low price
+    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.description,p.discount,r.rating,p.brand,p.categories) " +
+            "FROM Product p " +
+            "join Brand b " +
+            "on p.brand = b.id " +
+            "join Categories c " +
+            "on p.categories = c.id "+
+            "left join Rating r " +
+            "on r.product = p.id " +
+            "order by p.price ASC")
+    List<ProductDtoCustom> getProductByPrice();
+
+    // sort by high price
+    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.description,p.discount,r.rating,p.brand,p.categories) " +
+            "FROM Product p " +
+            "join Brand b " +
+            "on p.brand = b.id " +
+            "join Categories c " +
+            "on p.categories = c.id "+
+            "left join Rating r " +
+            "on r.product = p.id " +
+            "order by p.price DESC")
+    List<ProductDtoCustom> getProductByPriceDesc();
 }

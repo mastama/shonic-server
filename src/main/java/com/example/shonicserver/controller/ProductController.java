@@ -101,6 +101,21 @@ public class ProductController {
         return new ResponseEntity<>(new Response(400,"Bad Request",null,null), HttpStatus.BAD_REQUEST);
 
     }
+
+
+    /*
+    Paramsnya
+    Keyword : String
+    page_no : Integer
+    page_size : Integer
+    filter_max_price : Integer
+    filter_min_price: Integer
+    filter_isDiscount: Boolean
+    filter_is4Star : Boolean
+    sortByNewProduct: Boolean
+    sortByPriceDesc : Boolean
+    sortByPriceAsc : Boolean
+     */
     @GetMapping("/search/{keyword}")
     public ResponseEntity<Response> searchByKeyword(@PathVariable("keyword") String keyword,
                                                  @RequestParam int pageNo,@RequestParam int pageSize) {
