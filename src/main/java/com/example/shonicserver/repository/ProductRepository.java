@@ -66,4 +66,15 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "on cp.id = c.categoryParent " +
             "where c.name=:category")
     List<CategoryDtoCustom> getByCategory(@Param("category") String category);
+
+    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.discount,r.rating,p.brand,p.categories,p.review) " +
+            "FROM Product p " +
+            "join Brand b " +
+            "on p.brand = b.id " +
+            "join Categories c " +
+            "on p.categories = c.id "+
+            "left join Rating r " +
+            "on r.product = p.id " +
+            "order by p.createdAt ASC")
+    Page<ProductDtoCustom> findAllProductByDate(Pageable pageable);
 }

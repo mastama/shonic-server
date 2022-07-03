@@ -31,6 +31,8 @@ public interface ProductService {
 
    List<CategoryDtoCustom> getByCategory(String category);
 
-   //List<ProductDtoCustom> listAll(String keyword, int pageNo, int pageSize);
+    List<ProductDtoCustom> getAllProductBydate(int pageNo, int pageSize);
+
+    //List<ProductDtoCustom> listAll(String keyword, int pageNo, int pageSize);
 
 }

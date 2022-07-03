@@ -58,6 +58,11 @@ public class ProductController {
         List<CategoryDtoCustom>categoryDtoCustoms=this.productService.getByCategory(category);
         return new ResponseEntity<>(new Response(200,"succsess",categoryDtoCustoms,null),HttpStatus.OK);
     }
+    @GetMapping("/getAllProductByDate")
+    public ResponseEntity<Response>getAllProductByDate( @RequestParam (name = "pageNo", required = false, defaultValue = "1")int pageNo,@RequestParam (name = "pageSize", required = false, defaultValue = "10")int pageSize){
+        List<ProductDtoCustom>lisProduct=this.productService.getAllProductBydate(pageNo,pageSize);
+        return new ResponseEntity<>(new Response(200,"succsess",lisProduct,null),HttpStatus.OK);
+    }
 
     //softdelete
 

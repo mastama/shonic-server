@@ -208,6 +208,13 @@ public class ProductServiceImpl implements ProductService {
         return categoryDtoCustoms;
     }
 
+    @Override
+    public List<ProductDtoCustom> getAllProductBydate(int pageNo, int pageSize) {
+        Pageable pageable= PageRequest.of(pageNo-1,pageSize);
+        List<ProductDtoCustom>productList=productRepository.findAllProductByDate(pageable).getContent();
+        return productList;
+    }
+
 
 }
 
