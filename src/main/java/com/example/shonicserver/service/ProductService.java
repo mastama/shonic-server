@@ -1,6 +1,9 @@
 package com.example.shonicserver.service;
 
+
 import com.example.shonicserver.dto.ProductDetailDTO;
+import com.example.shonicserver.dto.BranDtoCustom;
+import com.example.shonicserver.dto.CategoryDtoCustom;
 import com.example.shonicserver.dto.ProductDto;
 import com.example.shonicserver.dto.ProductDtoCustom;
 import com.example.shonicserver.dto.ProductListDTO;
@@ -24,6 +27,10 @@ public interface ProductService {
    void deleteAllProduct();
 
    List<ProductListDTO> getNewestProduct(int pageNo, int pageSize);
+
+   List<BranDtoCustom> getByBrand(String brand);
+
+   List<CategoryDtoCustom> getByCategory(String category);
 
 
 }

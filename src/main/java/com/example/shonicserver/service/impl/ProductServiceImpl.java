@@ -210,6 +210,18 @@ public class ProductServiceImpl implements ProductService {
         return null;
     }
 
+    @Override
+    public List<BranDtoCustom> getByBrand(String brand) {
+        List<BranDtoCustom>branDtoCustoms=productRepository.getByBrand(brand);
+        return branDtoCustoms ;
+    }
+
+    @Override
+    public List<CategoryDtoCustom> getByCategory(String category) {
+        List<CategoryDtoCustom>categoryDtoCustoms=productRepository.getByCategory(category);
+        return categoryDtoCustoms;
+    }
+
 
 }
 

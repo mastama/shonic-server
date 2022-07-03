@@ -1,7 +1,11 @@
 package com.example.shonicserver.controller;
 
+
 import com.example.shonicserver.dto.ProductDetailDTO;
 import com.example.shonicserver.dto.ProductListDTO;
+import com.example.shonicserver.dto.BranDtoCustom;
+import com.example.shonicserver.dto.CategoryDtoCustom;
+import com.example.shonicserver.model.Product;
 import com.example.shonicserver.payload.Response;
 import com.example.shonicserver.repository.ProductRepository;
 import com.example.shonicserver.service.ProductService;
@@ -29,10 +33,28 @@ public class ProductController {
 
     @GetMapping("getById/{id}")
     public ResponseEntity<Response> getOneProduct(@PathVariable UUID id) {
+
       ProductDetailDTO product=this.productService.getById(id);
       if(product!=null){
           return new ResponseEntity<>(new Response(200,"succsess",product,null),HttpStatus.OK);
       }else return new ResponseEntity<>(new Response(400,"Product ID Not Found",null,null),HttpStatus.BAD_REQUEST);
+
+    }
+//    @GetMapping("/filter")
+//    public  ResponseEntity<Response> getFilterProduct(@RequestParam int minPrice,@RequestParam int maxPrice){
+//        List<ProductDtoCustom> listProducts= this.productService.getFilterByPrice(minPrice,maxPrice);
+//        return new ResponseEntity<>(new Response(200,"success",listProducts,null),HttpStatus.OK);
+//    }
+
+    @GetMapping("/getByBrad")
+    public ResponseEntity<Response>getByBrand(@RequestParam String brand){
+        List<BranDtoCustom>branDtoCustom=this.productService.getByBrand(brand);
+        return new ResponseEntity<>(new Response(200,"succsess",branDtoCustom,null),HttpStatus.OK);
+    }
+    @GetMapping("/getCategory")
+    public ResponseEntity<Response>getByCategory(@RequestParam String category){
+        List<CategoryDtoCustom>categoryDtoCustoms=this.productService.getByCategory(category);
+        return new ResponseEntity<>(new Response(200,"succsess",categoryDtoCustoms,null),HttpStatus.OK);
 
     }
 
