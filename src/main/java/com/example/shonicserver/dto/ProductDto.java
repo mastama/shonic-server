@@ -4,6 +4,7 @@ import com.example.shonicserver.model.Brand;
 import com.example.shonicserver.model.Categories;
 import com.example.shonicserver.model.FlashSale;
 import com.example.shonicserver.model.Rating;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -20,6 +21,8 @@ public class ProductDto {
     private Integer price;
     private Integer qty;
     private String category;
+    @JsonProperty("category_parent")
+    private String categoryParent;
     private String brand;
     private Float weight;
     private String description;

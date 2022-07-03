@@ -19,7 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     public List<Product> findProductById(
     @Param("id") UUID id);*/
 
-    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.description,p.discount,r.rating,p.brand,p.categories) " +
+    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.discount,p.rating,p.brand,p.categories,p.review) " +
             "FROM Product p " +
             "join Brand b " +
             "on p.brand = b.id " +
@@ -27,12 +27,13 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "on p.categories = c.id "+
            "left join Rating r " +
            "on r.product = p.id " +
-            " WHERE lower(p.name) LIKE %:keyword%"
+            " WHERE ( lower(p.name) LIKE %:keyword%"
             + " OR lower(b.name) LIKE %:keyword%"
-            + " OR lower(c.name) LIKE %:keyword%"   )
-    Page<ProductDtoCustom> search(@Param("keyword") String keyword, Pageable pageable);
+            + " OR lower(c.name) LIKE %:keyword%) AND (p.price>=:minPrice and p.price <=:maxPrice)"
+            + " AND p.rating >= :rating")
+    Page<ProductDtoCustom> search(@Param("keyword") String keyword, Pageable pageable,@Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice,@Param("rating")Float rating);
 
-@Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.description,p.discount,r.rating,p.brand,p.categories) " +
+@Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.discount,p.rating,p.brand,p.categories,p.review) " +
         "FROM Product p " +
         "join Brand b " +
         "on p.brand = b.id " +
@@ -43,7 +44,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
         "order by p.createdAt ASC")
     List<ProductDtoCustom>getProductByDate();
 
-    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.description,p.discount,r.rating,p.brand,p.categories) " +
+    @Query(value = "SELECT new com.example.shonicserver.dto.ProductDtoCustom(p.id,p.createdAt,p.image,p.name, p.price, p.qty,p.discount,p.rating,p.brand,p.categories,p.review) " +
             "FROM Product p " +
             "join Brand b " +
             "on p.brand = b.id " +

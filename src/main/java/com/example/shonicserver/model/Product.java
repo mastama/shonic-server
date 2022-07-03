@@ -27,16 +27,16 @@ public class Product extends BaseEntity{
     @Column(name = "name",  unique = true)
     private String name;
 
-    @Column(name = "price" )
+    @Column(name = "price" ,nullable = false)
     private Integer price;
 
     @Column(name = "qty",  length = 3)
     private Integer qty;
 
-    @Column(name = "description")
+    @Column(name = "description",length = 5000)
     private String description;
 
-    @Column(name = "discount")
+    @Column(columnDefinition = "integer default 0")
     private Integer discount;
     // categoryId OneToMany
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -58,9 +58,12 @@ public class Product extends BaseEntity{
     @Column(name = "image_full")
     private String imageFull;
 
+    @Column(nullable = false)
     private Float weight;
 
     private Float rating;
+
+    private Integer review;
 
     // rating OneToMany
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

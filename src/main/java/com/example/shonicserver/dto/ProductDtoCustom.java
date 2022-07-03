@@ -21,9 +21,10 @@ public class ProductDtoCustom {
     private String name;
     private Integer price;
     private Integer qty;
-    private String description;
+//    private String description;
     private Integer discount;
-    private Integer rating;
+    private Float rating;
     private Brand brand;
     private Categories category;
+    private Integer review;
 }

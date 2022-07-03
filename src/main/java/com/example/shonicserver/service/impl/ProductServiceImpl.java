@@ -5,6 +5,7 @@ import com.example.shonicserver.dto.*;
 import com.example.shonicserver.model.*;
 import com.example.shonicserver.payload.response.CreateProductResponse;
 import com.example.shonicserver.repository.BrandRepository;
+import com.example.shonicserver.repository.CategoryParentRepository;
 import com.example.shonicserver.repository.CategoryRepository;
 import com.example.shonicserver.repository.ProductRepository;
 import com.example.shonicserver.service.ProductService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -24,6 +26,9 @@ public class ProductServiceImpl implements ProductService {
     private BrandRepository brandRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private CategoryParentRepository categoryParentRepository;
 
     @Override
     public CreateProductResponse insert(ProductDto productDto) {
@@ -72,18 +77,27 @@ public class ProductServiceImpl implements ProductService {
 
         product.setBrand(brand);
 
-        String nameCategory = productDto.getCategory();
+        String nameCategory = productDto.getCategory().toLowerCase();
         Optional<Categories> categoriesOptional = this.categoryRepository.findByName(nameCategory);
         Categories categories;
         if (categoriesOptional.isPresent()) {
             categories = categoriesOptional.get();
         } else {
+            CategoryParent categoryParent ;
+            Optional<CategoryParent> categoryParentOptional = this.categoryParentRepository.findByName(productDto.getCategoryParent().toLowerCase());
+            if(categoryParentOptional.isPresent()){
+                categoryParent =categoryParentOptional.get();
+            }else {
+                CategoryParent newCategoryParent = new CategoryParent();
+                newCategoryParent.setName(productDto.getCategoryParent().toLowerCase());
+                 categoryParent = categoryParentRepository.save(newCategoryParent);
+            }
             Categories newCategory = new Categories();
             newCategory.setName(nameCategory);
+            newCategory.setCategoryParent(categoryParent);
             categories = categoryRepository.save(newCategory);
         }
         product.setCategories(categories);
-
 
         //dto product
         Product productInserted = productRepository.save(product);
@@ -160,10 +174,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-   public List<ProductDtoCustom> findByKeyword(String keyword,int pageNo,int pageSize) {
+   public List<ProductDtoCustom> findByKeyword(String keyword,int pageNo,int pageSize,Integer minPrice,Integer maxPrice,Float rating) {
         Pageable pageable= PageRequest.of(pageNo-1,pageSize);
 
-        List<ProductDtoCustom>productList=productRepository.search(keyword.toLowerCase(Locale.ROOT),pageable).getContent();
+        List<ProductDtoCustom>productList=productRepository.search(keyword.toLowerCase(Locale.ROOT),pageable,minPrice,maxPrice,rating).getContent();
         if(!productList.isEmpty())
             return productList;
 
@@ -175,6 +189,11 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDtoCustom> getFilterByPrice(int minPrice, int maxPrice) {
         List<ProductDtoCustom>productList=productRepository.getFilterPrice(minPrice,maxPrice);
         return productList;
+    }
+
+    @Override
+    public void deleteAllProduct() {
+        productRepository.deleteAll();
     }
 
 

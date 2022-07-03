@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,6 +30,7 @@ import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class JwtConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private JpaUserDetailsService jpaUserDetailsService;
@@ -47,8 +49,9 @@ public class JwtConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .cors().disable()
                 .authorizeRequests()
+                .antMatchers("/api/v1/owner/**").permitAll()
                 .antMatchers("/oauth2/**").permitAll()
-                .antMatchers("/api/v1/otp/*","/api/v1/auth/*","/*","/api/v1/forgotpassword/*","/api/v1/product/**").permitAll() // allow this endpoint without authentication
+                .antMatchers("/api/v1/otp/*","/api/v1/auth/*","/*","/api/v1/forgotpassword/*","/api/v1/mock/*","/api/v1/product/**").permitAll() // allow this endpoint without authentication
                 .anyRequest().authenticated()// for any other request, authentication should be performed
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint)
