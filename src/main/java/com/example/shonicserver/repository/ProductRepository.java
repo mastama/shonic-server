@@ -1,8 +1,7 @@
 package com.example.shonicserver.repository;
 
-import com.example.shonicserver.dto.BranDtoCustom;
+import com.example.shonicserver.dto.BrandDtoCustom;
 import com.example.shonicserver.dto.CategoryDtoCustom;
-import com.example.shonicserver.dto.ProductDtoCustom;
 import com.example.shonicserver.model.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,16 +9,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, UUID> {
-    /*@Query("SELECT p FROM Product p WHERE p.id = :id")
-    public List<Product> findProductById(
-    @Param("id") UUID id);*/
 
     @Query(value = "SELECT p " +
             "FROM Product p " +
@@ -94,11 +89,10 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
         "order by p.createdAt DESC")
     Page<Product>getProductByDate(Pageable pageable);
 
-    List<ProductDtoCustom> getFilterPrice(@Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice);
-    @Query(value = "SELECT new com.example.shonicserver.dto.BranDtoCustom(b.id,b.name)" +
+    @Query(value = "SELECT new com.example.shonicserver.dto.BrandDtoCustom(b.id,b.name)" +
             "from Brand b " +
-            "where b.name=:brand")
-    List<BranDtoCustom>getByBrand(@Param("brand") String brand);
+            "where lower(b.name) =:brand")
+    List<BrandDtoCustom>getByBrand(@Param("brand") String brand);
 
     @Query(value = "SELECT new com.example.shonicserver.dto.CategoryDtoCustom(c.categoryId,c.name,cp.id)" +
             "from Categories c " +
@@ -106,6 +100,45 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "on cp.id = c.categoryParent " +
             "where c.name=:category")
     List<CategoryDtoCustom> getByCategory(@Param("category") String category);
+
+
+    List<Product> findAllByCategoriesAndIdNot(Categories categories,UUID id);
+
+    @Query(value = "SELECT p FROM Product p WHERE p.categories IN :categories"
+            + " AND (p.price>=:minPrice and p.price <=:maxPrice)"
+            + " AND (p.rating >= :rating)"
+            + " AND (p.discount >= :discount)")
+    List<Product> getByListCategory(Pageable pageable, @Param("categories")List<Categories> categories,@Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice,@Param("rating") Float rating,@Param("discount")Integer discount);
+
+    @Query(value = "SELECT p FROM Product p WHERE p.categories IN :categories"
+            + " AND (p.price>=:minPrice and p.price <=:maxPrice)"
+            + " AND (p.rating >= :rating)"
+            + " AND (p.discount >= :discount)"
+            + " order by p.createdAt DESC")
+    List<Product> getByListCategoryDate(Pageable pageable, @Param("categories")List<Categories> categories,@Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice,@Param("rating") Float rating,@Param("discount")Integer discount);
+
+    @Query(value = "SELECT p FROM Product p WHERE p.categories IN :categories"
+            + " AND (p.price>=:minPrice and p.price <=:maxPrice)"
+            + " AND (p.rating >= :rating)"
+            + " AND (p.discount >= :discount)"
+            + " order by p.price DESC")
+    List<Product> getByListCategoryPriceDesc(Pageable pageable, @Param("categories")List<Categories> categories,@Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice,@Param("rating") Float rating,@Param("discount")Integer discount);
+
+    @Query(value = "SELECT p FROM Product p WHERE p.categories IN :categories"
+            + " AND (p.price>=:minPrice and p.price <=:maxPrice)"
+            + " AND (p.rating >= :rating)"
+            + " AND (p.discount >= :discount)"
+            + " order by p.price ASC")
+    List<Product> getByListCategoryPriceAsc(Pageable pageable, @Param("categories")List<Categories> categories,@Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice,@Param("rating") Float rating,@Param("discount")Integer discount);
+
+//    @Query(value = "SELECT p FROM Product p WHERE p.categories IN :categories")
+//    List<Product> getProductByBrand(Pageable pageable, @Param("brand")Brand brand);
+
+    @Query(value = "SELECT p FROM Product p WHERE p.brand = :brand"
+            + " AND (p.price>=:minPrice and p.price <=:maxPrice)"
+            + " AND (p.rating >= :rating)"
+            + " AND (p.discount >= :discount)")
+    List<Product> getProductByBrand(Pageable pageable, @Param("brand")Brand brand,@Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice,@Param("rating") Float rating,@Param("discount")Integer discount);
 
 }
 

@@ -211,8 +211,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<BranDtoCustom> getByBrand(String brand) {
-        List<BranDtoCustom>branDtoCustoms=productRepository.getByBrand(brand);
+    public List<BrandDtoCustom> getByBrand(String brand) {
+
+        List<BrandDtoCustom>branDtoCustoms=productRepository.getByBrand(brand.toLowerCase());
         return branDtoCustoms ;
     }
 
@@ -220,6 +221,66 @@ public class ProductServiceImpl implements ProductService {
     public List<CategoryDtoCustom> getByCategory(String category) {
         List<CategoryDtoCustom>categoryDtoCustoms=productRepository.getByCategory(category);
         return categoryDtoCustoms;
+    }
+
+    @Override
+    public List<ProductListDTO> getSimmilarityProduct(UUID productId) {
+        Optional<Product> product = productRepository.findById(productId);
+        if(product.isPresent()){
+            List<Product> productList = productRepository.findAllByCategoriesAndIdNot(product.get().getCategories(), productId);
+            return productList.stream().map(ProductListDTO::of).collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    @Override
+    public List<ProductListDTO> getProductCategories(int pageNo, int pageSize, String name,int minPrice, int maxPrice,float rating,int discount,String sort) {
+        Pageable pageable= PageRequest.of(pageNo-1,pageSize);
+        Optional<CategoryParent> categoryParent = categoryParentRepository.findByName(name.toLowerCase());
+        List<Categories> categories;
+
+        if(categoryParent.isPresent()){
+            categories = categoryRepository.getAllCategoriesbyParent(categoryParent.get().getId());
+        }
+        else{
+            categories = categoryRepository.findAllByName(name.toLowerCase());
+        }
+
+        List<Product>productList = new ArrayList<>();
+        switch (sort){
+            case "date":
+                productList=productRepository.getByListCategoryDate(pageable,categories,minPrice,maxPrice,rating,discount);
+                break;
+            case "desc":
+                productList=productRepository.getByListCategoryPriceDesc(pageable,categories,minPrice,maxPrice,rating,discount);
+                break;
+            case "asc":
+                productList=productRepository.getByListCategoryPriceAsc(pageable,categories,minPrice,maxPrice,rating,discount);
+                break;
+            default:
+                productList=productRepository.getByListCategory(pageable,categories,minPrice,maxPrice,rating,discount);
+        }
+
+
+        return productList.stream().map(ProductListDTO::of).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductListDTO> getProductBrand(int pageNo, int pageSize, String name, int minPrice, int maxPrice, float rating, int discount, String sort) {
+        Pageable pageable= PageRequest.of(pageNo-1,pageSize);
+        Optional<Brand> brandOptional = brandRepository.findAllByName(name.toLowerCase());
+
+        Brand brand;
+        if(brandOptional.isPresent()){
+
+            brand = brandOptional.get();
+            System.out.println(brand.getName());
+        }else return null;
+
+        List<Product> productList = productRepository.getProductByBrand(pageable,brand,minPrice,maxPrice,rating,discount);
+
+        return productList.stream().map(ProductListDTO::of).collect(Collectors.toList());
+
     }
 
 

@@ -2,15 +2,11 @@ package com.example.shonicserver.service;
 
 
 import com.example.shonicserver.dto.ProductDetailDTO;
-import com.example.shonicserver.dto.BranDtoCustom;
+import com.example.shonicserver.dto.BrandDtoCustom;
 import com.example.shonicserver.dto.CategoryDtoCustom;
 import com.example.shonicserver.dto.ProductDto;
-import com.example.shonicserver.dto.ProductDtoCustom;
 import com.example.shonicserver.dto.ProductListDTO;
-import com.example.shonicserver.model.Product;
 import com.example.shonicserver.payload.response.CreateProductResponse;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,9 +24,13 @@ public interface ProductService {
 
    List<ProductListDTO> getNewestProduct(int pageNo, int pageSize);
 
-   List<BranDtoCustom> getByBrand(String brand);
+   List<BrandDtoCustom> getByBrand(String brand);
 
    List<CategoryDtoCustom> getByCategory(String category);
 
+   List<ProductListDTO> getSimmilarityProduct(UUID productId);
 
+   List<ProductListDTO> getProductCategories(int pageNo,int pageSize,String name,int minPrice, int maxPrice,float rating,int discount,String sort);
+
+   List<ProductListDTO> getProductBrand(int pageNo,int pageSize,String name,int minPrice, int maxPrice,float rating,int discount,String sort);
 }
