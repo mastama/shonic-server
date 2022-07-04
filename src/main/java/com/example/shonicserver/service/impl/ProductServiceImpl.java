@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -116,12 +116,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getById(UUID id) {
+    public ProductDetailDTO getById(UUID id) {
         Optional<Product> productOptional = productRepository.findById(id);
-        Product product = new Product();
         if (productOptional.isPresent()) {
-            product = productOptional.get();
-            return convertProductToProductDto(product);
+        productOptional.get();
+            return ProductDetailDTO.of(productOptional.get());
         }
        return null;
     }
@@ -166,7 +165,6 @@ public class ProductServiceImpl implements ProductService {
         if(product.isPresent()){
             Product product1=product.get();
             product1.setDeleted(true);
-
             productRepository.save(product1);
             return true;
         }
@@ -174,21 +172,28 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-   public List<ProductDtoCustom> findByKeyword(String keyword,int pageNo,int pageSize) {
+   public List<ProductListDTO> findByKeyword(String keyword, int pageNo, int pageSize,int minPrice,int maxPrice, float rating,int discount,String sort) {
         Pageable pageable= PageRequest.of(pageNo-1,pageSize);
+        List<Product>productList = new ArrayList<>();
+        switch (sort){
+            case "date":
+                productList=productRepository.searchSortDate(keyword.toLowerCase(Locale.ROOT),pageable,minPrice,maxPrice,rating,discount).getContent();
+                break;
+            case "desc":
+                productList=productRepository.searchSortPriceDesc(keyword.toLowerCase(Locale.ROOT),pageable,minPrice,maxPrice,rating,discount).getContent();
+                break;
+            case "asc":
+                productList=productRepository.searchSortPriceAsc(keyword.toLowerCase(Locale.ROOT),pageable,minPrice,maxPrice,rating,discount).getContent();
+                break;
+            default:
+                productList=productRepository.search(keyword.toLowerCase(Locale.ROOT),pageable,minPrice,maxPrice,rating,discount).getContent();
+        }
 
-        List<ProductDtoCustom>productList=productRepository.search(keyword.toLowerCase(Locale.ROOT),pageable).getContent();
         if(!productList.isEmpty())
-            return productList;
+            return productList.stream().map(ProductListDTO::of).collect(Collectors.toList());
 
         return null;
 
-    }
-
-    @Override
-    public List<ProductDtoCustom> getFilterByPrice(int minPrice, int maxPrice) {
-        List<ProductDtoCustom>productList=productRepository.getFilterPrice(minPrice,maxPrice);
-        return productList;
     }
 
     @Override
@@ -197,8 +202,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<BranDtoCustom> getByBrand(String brand) {
-        List<BranDtoCustom>branDtoCustoms=productRepository.getByBrand(brand);
+    public List<ProductListDTO> getNewestProduct(int pageNo, int pageSize) {
+        Pageable pageable= PageRequest.of(pageNo-1,pageSize);
+        List<Product> productList = productRepository.getProductByDate(pageable).getContent();
+        if(!productList.isEmpty())
+            return productList.stream().map(ProductListDTO::of).collect(Collectors.toList());
+        return null;
+    }
+
+    @Override
+    public List<BrandDtoCustom> getByBrand(String brand) {
+
+        List<BrandDtoCustom>branDtoCustoms=productRepository.getByBrand(brand.toLowerCase());
         return branDtoCustoms ;
     }
 
@@ -209,10 +224,70 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+<<<<<<< HEAD
     public List<ProductDtoCustom> getAllProductBydate(int pageNo, int pageSize) {
         Pageable pageable= PageRequest.of(pageNo-1,pageSize);
         List<ProductDtoCustom>productList=productRepository.findAllProductByDate(pageable).getContent();
         return productList;
+=======
+    public List<ProductListDTO> getSimmilarityProduct(UUID productId) {
+        Optional<Product> product = productRepository.findById(productId);
+        if(product.isPresent()){
+            List<Product> productList = productRepository.findAllByCategoriesAndIdNot(product.get().getCategories(), productId);
+            return productList.stream().map(ProductListDTO::of).collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    @Override
+    public List<ProductListDTO> getProductCategories(int pageNo, int pageSize, String name,int minPrice, int maxPrice,float rating,int discount,String sort) {
+        Pageable pageable= PageRequest.of(pageNo-1,pageSize);
+        Optional<CategoryParent> categoryParent = categoryParentRepository.findByName(name.toLowerCase());
+        List<Categories> categories;
+
+        if(categoryParent.isPresent()){
+            categories = categoryRepository.getAllCategoriesbyParent(categoryParent.get().getId());
+        }
+        else{
+            categories = categoryRepository.findAllByName(name.toLowerCase());
+        }
+
+        List<Product>productList = new ArrayList<>();
+        switch (sort){
+            case "date":
+                productList=productRepository.getByListCategoryDate(pageable,categories,minPrice,maxPrice,rating,discount);
+                break;
+            case "desc":
+                productList=productRepository.getByListCategoryPriceDesc(pageable,categories,minPrice,maxPrice,rating,discount);
+                break;
+            case "asc":
+                productList=productRepository.getByListCategoryPriceAsc(pageable,categories,minPrice,maxPrice,rating,discount);
+                break;
+            default:
+                productList=productRepository.getByListCategory(pageable,categories,minPrice,maxPrice,rating,discount);
+        }
+
+
+        return productList.stream().map(ProductListDTO::of).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductListDTO> getProductBrand(int pageNo, int pageSize, String name, int minPrice, int maxPrice, float rating, int discount, String sort) {
+        Pageable pageable= PageRequest.of(pageNo-1,pageSize);
+        Optional<Brand> brandOptional = brandRepository.findAllByName(name.toLowerCase());
+
+        Brand brand;
+        if(brandOptional.isPresent()){
+
+            brand = brandOptional.get();
+            System.out.println(brand.getName());
+        }else return null;
+
+        List<Product> productList = productRepository.getProductByBrand(pageable,brand,minPrice,maxPrice,rating,discount);
+
+        return productList.stream().map(ProductListDTO::of).collect(Collectors.toList());
+
+>>>>>>> ef4ee3f109ad881095a795452beb7a9958cf8cdf
     }
 
 

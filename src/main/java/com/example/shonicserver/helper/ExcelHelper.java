@@ -81,9 +81,11 @@ public class ExcelHelper {
                     }
                     cellIdx++;
                 }
+
                 products.add(product);
                     rowNumber++;
             }
+
             workbook.close();
             return products;
         } catch (IOException e) {
