@@ -1,12 +1,12 @@
 package com.example.shonicserver.service;
 
-import com.example.shonicserver.dto.BranDtoCustom;
+
+import com.example.shonicserver.dto.ProductDetailDTO;
+import com.example.shonicserver.dto.BrandDtoCustom;
 import com.example.shonicserver.dto.CategoryDtoCustom;
 import com.example.shonicserver.dto.ProductDto;
-import com.example.shonicserver.dto.ProductDtoCustom;
-import com.example.shonicserver.model.Product;
+import com.example.shonicserver.dto.ProductListDTO;
 import com.example.shonicserver.payload.response.CreateProductResponse;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,23 +14,23 @@ import java.util.UUID;
 public interface ProductService {
    public CreateProductResponse insert(ProductDto productDto);
 
-  //List<ProductDto> findById(UUID id);
-
-   public Product getById(UUID id);
+   public ProductDetailDTO getById(UUID id);
 
    Boolean delete(UUID id);
 
-   List<ProductDtoCustom> findByKeyword(String keyword,int pageNo,int pageSize);
-
-   List<ProductDtoCustom> getFilterByPrice(int minPrice, int maxPrice);
-
+   List<ProductListDTO> findByKeyword(String keyword, int pageNo, int pageSize,int minPrice, int maxPrice,float rating,int discount,String sort);
 
    void deleteAllProduct();
 
-   List<BranDtoCustom> getByBrand(String brand);
+   List<ProductListDTO> getNewestProduct(int pageNo, int pageSize);
+
+   List<BrandDtoCustom> getByBrand(String brand);
 
    List<CategoryDtoCustom> getByCategory(String category);
 
-   //List<ProductDtoCustom> listAll(String keyword, int pageNo, int pageSize);
+   List<ProductListDTO> getSimmilarityProduct(UUID productId);
 
+   List<ProductListDTO> getProductCategories(int pageNo,int pageSize,String name,int minPrice, int maxPrice,float rating,int discount,String sort);
+
+   List<ProductListDTO> getProductBrand(int pageNo,int pageSize,String name,int minPrice, int maxPrice,float rating,int discount,String sort);
 }
